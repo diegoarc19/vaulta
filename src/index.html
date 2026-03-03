@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaulta - Sistema de Gestión Financiera Personal</title>
+    <meta name="description"
+        content="Vaulta es el sistema de gestión financiera personal que te ayuda a tomar el control total de tu dinero. Simple, potente y seguro.">
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #002366;
+            --primary-light: #007bff;
+            --success: #10b981;
+            --dark: #1a202c;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--gray-900);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background: white;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* NAVIGATION */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            padding: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .logo img {
+            height: 42px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 35, 102, 0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 123, 255, 0.35);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            margin-top: 76px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a1628 0%, var(--primary) 50%, var(--primary-light) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated background gradient */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 123, 255, 0.15) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Floating particles */
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.3), transparent),
+                radial-gradient(2px 2px at 60% 70%, rgba(255, 255, 255, 0.2), transparent),
+                radial-gradient(1px 1px at 50% 50%, rgba(255, 255, 255, 0.3), transparent),
+                radial-gradient(1px 1px at 80% 10%, rgba(255, 255, 255, 0.2), transparent);
+            background-size: 200% 200%;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                background-position: 0% 0%;
+            }
+
+            50% {
+                background-position: 100% 100%;
+            }
+        }
+
+        .hero-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-badge i {
+            color: #10b981;
+        }
+
+        .hero-content h1 {
+            font-size: 64px;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #a0d8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(255, 255, 255, 0.35);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Hero illustration */
+        .hero-visual {
+            position: relative;
+            animation: fadeInRight 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .dashboard-mockup {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .mockup-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .mockup-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .mockup-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1.25rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-box .label {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-box .value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .mockup-chart {
+            background: rgba(255, 255, 255, 0.1);
+            height: 120px;
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            padding: 1rem;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.3) 100%);
+            border-radius: 6px 6px 0 0;
+            animation: growBar 1.5s ease-out both;
+        }
+
+        @keyframes growBar {
+            from {
+                height: 0;
+            }
+        }
+
+        .chart-bar:nth-child(1) {
+            height: 60%;
+            animation-delay: 0.1s;
+        }
+
+        .chart-bar:nth-child(2) {
+            height: 85%;
+            animation-delay: 0.2s;
+        }
+
+        .chart-bar:nth-child(3) {
+            height: 45%;
+            animation-delay: 0.3s;
+        }
+
+        .chart-bar:nth-child(4) {
+            height: 95%;
+            animation-delay: 0.4s;
+        }
+
+        .chart-bar:nth-child(5) {
+            height: 70%;
+            animation-delay: 0.5s;
+        }
+
+        .chart-bar:nth-child(6) {
+            height: 80%;
+            animation-delay: 0.6s;
+        }
+
+        /* STATS BANNER */
+        .stats-banner {
+            background: white;
+            padding: 3rem 2rem;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .stats-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item .label {
+            color: var(--gray-600);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* FEATURES SECTION */
+        .features {
+            padding: 6rem 2rem;
+            background: var(--gray-50);
+        }
+
+        .section-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 48px;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            font-size: 20px;
+            color: var(--gray-600);
+            line-height: 1.7;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--gray-200);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 35, 102, 0.15);
+            border-color: var(--primary-light);
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.03;
+        }
+
+        .feature-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-size: 32px;
+            box-shadow: 0 8px 20px rgba(0, 35, 102, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            color: var(--gray-600);
+            font-size: 16px;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* BENEFITS SECTION */
+        .benefits {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .benefits-content h2 {
+            font-size: 48px;
+            color: var(--gray-900);
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .benefits-content p {
+            font-size: 18px;
+            color: var(--gray-600);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .benefits-list {
+            list-style: none;
+        }
+
+        .benefits-list li {
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 17px;
+            color: var(--gray-700);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .benefits-list li:hover {
+            transform: translateX(8px);
+            color: var(--primary);
+        }
+
+        .benefits-list i {
+            color: var(--success);
+            font-size: 24px;
+            min-width: 24px;
+        }
+
+        .benefits-visual {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 35, 102, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefits-visual::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -50px;
+            right: -50px;
+        }
+
+        .benefits-icon-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .benefit-icon-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .benefit-icon-box i {
+            font-size: 48px;
+            color: white;
+            margin-bottom: 0.75rem;
+        }
+
+        .benefit-icon-box span {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* CTA SECTION */
+        .cta {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, #0a1628 0%, var(--primary) 50%, var(--primary-light) 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: 52px;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .cta p {
+            font-size: 22px;
+            margin-bottom: 3rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: var(--dark);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 3rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand img {
+            height: 36px;
+        }
+
+        .footer-brand span {
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .footer-about p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--primary-light);
+            transform: translateY(-3px);
+        }
+
+        .footer-section h4 {
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 48px;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem 1.5rem;
+            }
+
+            .hero-content h1 {
+                font-size: 36px;
+            }
+
+            .hero-content p {
+                font-size: 18px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .section-header h2 {
+                font-size: 36px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .cta h2 {
+                font-size: 36px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scroll animations */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVIGATION -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="images/logotrans.png" alt="Vaulta">
+            </div>
+            <a href="login.html" class="nav-btn">
+                <i class="fas fa-sign-in-alt"></i> Entrar
+            </a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>100% Seguro y Privado</span>
+                </div>
+                <h1>
+                    Tu dinero bajo <span class="gradient-text">control total</span>
+                </h1>
+                <p>
+                    Gestiona todas tus finanzas personales en un solo lugar. Vaulta te ofrece visibilidad completa,
+                    previsiones inteligentes y el control que necesitas para alcanzar tus objetivos financieros.
+                </p>
+                <div class="hero-buttons">
+                    <a href="register.html" class="btn-primary">
+                        <i class="fas fa-rocket"></i> Empezar Gratis
+                    </a>
+                    <a href="#features" class="btn-secondary">
+                        <i class="fas fa-play-circle"></i> Ver Demo
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-dot"></div>
+                        <div class="mockup-dot"></div>
+                        <div class="mockup-dot"></div>
+                    </div>
+                    <div class="mockup-stats">
+                        <div class="stat-box">
+                            <div class="label">Saldo Total</div>
+                            <div class="value">3.420€</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="label">Este Mes</div>
+                            <div class="value">+280€</div>
+                        </div>
+                    </div>
+                    <div class="mockup-chart">
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS BANNER -->
+    <section class="stats-banner">
+        <div class="stats-container">
+            <div class="stat-item scroll-animate">
+                <div class="number">10K+</div>
+                <div class="label">Usuarios Activos</div>
+            </div>
+            <div class="stat-item scroll-animate">
+                <div class="number">€50M+</div>
+                <div class="label">Gestionados</div>
+            </div>
+            <div class="stat-item scroll-animate">
+                <div class="number">99.9%</div>
+                <div class="label">Uptime</div>
+            </div>
+            <div class="stat-item scroll-animate">
+                <div class="number">4.9/5</div>
+                <div class="label">Valoración</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section id="features" class="features">
+        <div class="section-container">
+            <div class="section-header scroll-animate">
+                <span class="section-tag">Características</span>
+                <h2>Todo lo que necesitas para tus finanzas</h2>
+                <p>Herramientas profesionales diseñadas para simplificar la gestión de tu dinero</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card scroll-animate">
+                    <div class="feature-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <h3>Múltiples Cuentas</h3>
+                    <p>Gestiona todas tus cuentas bancarias, tarjetas y monederos desde una única plataforma.
+                        Visualiza tu patrimonio completo en tiempo real.</p>
+                </div>
+                <div class="feature-card scroll-animate">
+                    <div class="feature-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3>Transferencias Instantáneas</h3>
+                    <p>Mueve dinero entre tus cuentas al instante. Mantén un historial detallado de todas
+                        tus transacciones con búsqueda avanzada.</p>
+                </div>
+                <div class="feature-card scroll-animate">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync"></i>
+                    </div>
+                    <h3>Gastos Recurrentes</h3>
+                    <p>Registra suscripciones y pagos fijos mensuales. El sistema calcula automáticamente
+                        el impacto en tu balance futuro.</p>
+                </div>
+                <div class="feature-card scroll-animate">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Previsión Financiera</h3>
+                    <p>Proyecta tus finanzas hasta 6 meses adelante. Anticipa problemas de liquidez y toma
+                        decisiones informadas sobre tu economía.</p>
+                </div>
+                <div class="feature-card scroll-animate">
+                    <div class="feature-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3>Objetivos de Ahorro</h3>
+                    <p>Define metas financieras con plazos personalizados. Visualiza tu progreso y recibe
+                        motivación constante para alcanzarlas.</p>
+                </div>
+                <div class="feature-card scroll-animate">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Máxima Seguridad</h3>
+                    <p>Tus datos están protegidos con encriptación bcrypt y las mejores prácticas de seguridad.
+                        Tu privacidad es nuestra máxima prioridad.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BENEFITS SECTION -->
+    <section class="benefits">
+        <div class="section-container">
+            <div class="benefits-grid">
+                <div class="benefits-content scroll-animate">
+                    <h2>Diseñado para tu éxito financiero</h2>
+                    <p>
+                        Vaulta combina simplicidad con potencia profesional. Una herramienta completa que
+                        crece contigo y se adapta a tus necesidades.
+                    </p>
+                    <ul class="benefits-list">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Interfaz intuitiva y fácil de usar desde el primer día</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Dashboards visuales con gráficos en tiempo real</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Previsión inteligente basada en tus patrones de gasto</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Seguimiento detallado de todas tus transacciones</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Sistema de metas para alcanzar tus objetivos</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>100% gratuito, sin anuncios ni costes ocultos</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="benefits-visual scroll-animate">
+                    <div class="benefits-icon-grid">
+                        <div class="benefit-icon-box">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Responsive</span>
+                        </div>
+                        <div class="benefit-icon-box">
+                            <i class="fas fa-bolt"></i>
+                            <span>Rápido</span>
+                        </div>
+                        <div class="benefit-icon-box">
+                            <i class="fas fa-lock"></i>
+                            <span>Seguro</span>
+                        </div>
+                        <div class="benefit-icon-box">
+                            <i class="fas fa-heart"></i>
+                            <span>Simple</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="cta">
+        <div class="section-container">
+            <div class="cta-content scroll-animate">
+                <h2>Comienza tu viaje financiero hoy</h2>
+                <p>
+                    Únete a miles de personas que ya han tomado el control de sus finanzas con Vaulta.
+                    Es gratis, fácil y solo toma 2 minutos empezar.
+                </p>
+                <a href="register.html" class="btn-primary" style="font-size: 20px; padding: 1.25rem 3rem;">
+                    <i class="fas fa-user-plus"></i> Crear Cuenta Gratis
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-about">
+                <div class="footer-brand">
+                    <img src="images/logotrans.png" alt="Vaulta">
+                    <span>Vaulta</span>
+                </div>
+                <p>
+                    La plataforma de gestión financiera personal que te ayuda a tomar mejores decisiones
+                    sobre tu dinero.
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Producto</h4>
+                <ul class="footer-links">
+                    <li><a href="#features">Características</a></li>
+                    <li><a href="pricing.html">Precios</a></li>
+                    <li><a href="security.html">Seguridad</a></li>
+                    <li><a href="#">Actualizaciones</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Empresa</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Sobre nosotros</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Carreras</a></li>
+                    <li><a href="#">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="privacy.html">Privacidad</a></li>
+                    <li><a href="terms.html">Términos</a></li>
+                    <li><a href="#">Cookies</a></li>
+                    <li><a href="#">Licencias</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Vaulta. Sistema de Gestión Financiera Personal. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-animate').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

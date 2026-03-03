@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precios | Vaulta</title>
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            background: #f9fafb;
+        }
+
+        .navbar {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .back-btn {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            color: #002366;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #002366 0%, #007bff 100%);
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 22px;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: -4rem auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 35, 102, 0.15);
+        }
+
+        .pricing-card.featured {
+            border: 3px solid #007bff;
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'GRATIS SIEMPRE';
+            position: absolute;
+            top: 20px;
+            right: -40px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 8px 50px;
+            font-size: 12px;
+            font-weight: 700;
+            transform: rotate(45deg);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .plan-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-description {
+            color: #718096;
+            margin-bottom: 2rem;
+            font-size: 15px;
+        }
+
+        .price {
+            font-size: 56px;
+            font-weight: 800;
+            color: #002366;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-period {
+            color: #718096;
+            font-size: 16px;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #002366 0%, #007bff 100%);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+        }
+
+        .features-list {
+            list-style: none;
+        }
+
+        .features-list li {
+            padding: 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #4a5568;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+
+        .features-list i {
+            color: #10b981;
+            font-size: 18px;
+            min-width: 18px;
+        }
+
+        .faq-section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .faq-section h2 {
+            font-size: 36px;
+            font-weight: 800;
+            color: #1a202c;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1.5rem 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-answer {
+            color: #4a5568;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .container {
+                margin-top: -2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="images/logotrans.png" alt="Vaulta">
+            </div>
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Precios Simples y Transparentes</h1>
+        <p>Gestión financiera profesional accesible para todos. Sin costes ocultos, sin trucos.</p>
+    </section>
+
+    <div class="container">
+        <div class="pricing-grid">
+            <!-- Plan Gratuito -->
+            <div class="pricing-card featured">
+                <div class="plan-name">Plan Gratuito</div>
+                <div class="plan-description">Todo lo que necesitas para gestionar tus finanzas personales</div>
+                <div class="price">0€</div>
+                <div class="price-period">Gratis para siempre</div>
+                <a href="register.html" class="cta-button">
+                    <i class="fas fa-rocket"></i> Empezar Gratis
+                </a>
+                <ul class="features-list">
+                    <li><i class="fas fa-check-circle"></i> Cuentas ilimitadas</li>
+                    <li><i class="fas fa-check-circle"></i> Movimientos ilimitados</li>
+                    <li><i class="fas fa-check-circle"></i> Transferencias entre cuentas</li>
+                    <li><i class="fas fa-check-circle"></i> Gestión de pagos recurrentes</li>
+                    <li><i class="fas fa-check-circle"></i> Previsión financiera (6 meses)</li>
+                    <li><i class="fas fa-check-circle"></i> Objetivos de ahorro ilimitados</li>
+                    <li><i class="fas fa-check-circle"></i> Estimador de gastos mensuales</li>
+                    <li><i class="fas fa-check-circle"></i> Seguridad con encriptación bcrypt</li>
+                    <li><i class="fas fa-check-circle"></i> Sin anuncios</li>
+                    <li><i class="fas fa-check-circle"></i> Actualizaciones regulares</li>
+                    <li><i class="fas fa-check-circle"></i> Soporte por email</li>
+                </ul>
+            </div>
+
+            <!-- Plan Premium (Futuro) -->
+            <div class="pricing-card" style="opacity: 0.7;">
+                <div class="plan-name">Plan Premium</div>
+                <div class="plan-description">Funcionalidades avanzadas para usuarios power</div>
+                <div class="price" style="color: #718096;">Próximamente</div>
+                <div class="price-period">Planeado para 2026</div>
+                <a class="cta-button" style="background: #e5e7eb; color: #718096; cursor: not-allowed;">
+                    <i class="fas fa-clock"></i> Disponible Pronto
+                </a>
+                <ul class="features-list">
+                    <li><i class="fas fa-crown" style="color: #f59e0b;"></i> Todo del Plan Gratuito</li>
+                    <li><i class="fas fa-crown" style="color: #f59e0b;"></i> Inversiones y portfolio</li>
+                    <li><i class="fas fa-crown" style="color: #f59e0b;"></i> Presupuestos avanzados</li>
+                    <li><i class="fas fa-crown" style="color: #f59e0b;"></i> Informes personalizados PDF</li>
+                    <li><i class="fas fa-crown" style="color: #f59e0b;"></i> Sincronización con bancos</li>
+                    <li><i class="fas fa-crown" style="color: #f59e0b;"></i> Categorización automática</li>
+                    <li><i class="fas fa-crown" style="color: #f59e0b;"></i> Alertas personalizadas</li>
+                    <li><i class="fas fa-crown" style="color: #f59e0b;"></i> Soporte prioritario</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2>Preguntas Frecuentes</h2>
+
+            <div class="faq-item">
+                <div class="faq-question"><i class="fas fa-question-circle"
+                        style="color: #007bff; margin-right: 10px;"></i>¿Es realmente gratis?</div>
+                <div class="faq-answer">Sí, completamente gratis. Vaulta es un proyecto de código abierto que no
+                    requiere pago para usar todas sus funcionalidades actuales. No hay trucos, no hay costes ocultos y
+                    no hay anuncios.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question"><i class="fas fa-question-circle"
+                        style="color: #007bff; margin-right: 10px;"></i>¿Habrá límites en el plan gratuito?</div>
+                <div class="faq-answer">No. Puedes crear todas las cuentas que necesites, registrar todos los
+                    movimientos que quieras y establecer todos los objetivos financieros que desees. Sin límites
+                    artificiales.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question"><i class="fas fa-question-circle"
+                        style="color: #007bff; margin-right: 10px;"></i>¿Cuándo estará disponible el Plan Premium?</div>
+                <div class="faq-answer">Estamos trabajando en funcionalidades premium que se lanzarán durante 2026.
+                    Mientras tanto, puedes disfrutar de todas las características gratuitas sin restricciones.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question"><i class="fas fa-question-circle"
+                        style="color: #007bff; margin-right: 10px;"></i>¿Necesito tarjeta de crédito para registrarme?
+                </div>
+                <div class="faq-answer">No. El registro es completamente gratuito y no requiere información de pago.
+                    Solo necesitas un email y una contraseña para empezar.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question"><i class="fas fa-question-circle"
+                        style="color: #007bff; margin-right: 10px;"></i>¿Puedo cancelar mi cuenta en cualquier momento?
+                </div>
+                <div class="faq-answer">Absolutamente. Puedes eliminar tu cuenta en cualquier momento desde la
+                    configuración de tu perfil. Todos tus datos se eliminarán permanentemente.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question"><i class="fas fa-question-circle"
+                        style="color: #007bff; margin-right: 10px;"></i>¿Cómo se financia Vaulta?</div>
+                <div class="faq-answer">Actualmente Vaulta es un proyecto personal gratuito. En el futuro, planeamos
+                    ofrecer un plan premium opcional con funcionalidades avanzadas, pero el plan gratuito seguirá siendo
+                    completo y sin restricciones.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question"><i class="fas fa-question-circle"
+                        style="color: #007bff; margin-right: 10px;"></i>¿Ofrecen descuentos para estudiantes u
+                    organizaciones?</div>
+                <div class="faq-answer">Dado que el servicio es completamente gratuito, no hay descuentos necesarios.
+                    Todo el mundo tiene acceso completo a todas las características del plan gratuito.</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

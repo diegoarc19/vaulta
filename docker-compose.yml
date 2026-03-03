@@ -1,0 +1,50 @@
+services:
+  # SERVIDOR WEB (Tu página) — con HTTPS
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "8080:80" # HTTP  → redirige automáticamente a HTTPS
+      - "8443:443" # HTTPS → acceso seguro con certificado SSL
+    volumes:
+      - ./src:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - db
+      - php
+
+  # PHP-FPM (Procesador de PHP)
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    volumes:
+      - ./src:/usr/share/nginx/html
+    depends_on:
+      - db
+
+  # BASE DE DATOS (MySQL)
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: finanzas_app
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  # GESTOR VISUAL (phpMyAdmin)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+
+volumes:
+  db_data:

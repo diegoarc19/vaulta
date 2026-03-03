@@ -1,0 +1,11 @@
+# Ignorar datos de la base de datos de Docker
+mysql_data/
+db/
+data/
+
+# Ignorar archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Si tienes un archivo con contraseñas reales
+.env

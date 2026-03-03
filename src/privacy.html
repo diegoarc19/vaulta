@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidad | Vaulta</title>
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.8;
+            color: #2d3748;
+            background: #f9fafb;
+        }
+
+        .navbar {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .back-btn {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            color: #002366;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            color: #1a202c;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .header .date {
+            color: #718096;
+            font-size: 16px;
+        }
+
+        .content {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .content h2 {
+            font-size: 28px;
+            color: #1a202c;
+            margin: 2.5rem 0 1rem 0;
+            font-weight: 700;
+        }
+
+        .content h2:first-child {
+            margin-top: 0;
+        }
+
+        .content h3 {
+            font-size: 20px;
+            color: #2d3748;
+            margin: 1.5rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        .content p {
+            margin-bottom: 1.25rem;
+            color: #4a5568;
+            font-size: 16px;
+        }
+
+        .content ul,
+        .content ol {
+            margin: 1rem 0 1.5rem 2rem;
+            color: #4a5568;
+        }
+
+        .content li {
+            margin-bottom: 0.75rem;
+        }
+
+        .highlight {
+            background: #ebf8ff;
+            border-left: 4px solid #007bff;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .highlight strong {
+            color: #002366;
+        }
+
+        .warning {
+            background: #fff5f5;
+            border-left: 4px solid #f56565;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .warning strong {
+            color: #c53030;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .content {
+                padding: 2rem;
+            }
+
+            .container {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="images/logotrans.png" alt="Vaulta">
+            </div>
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Política de Privacidad</h1>
+            <p class="date">Última actualización: 10 de febrero de 2026</p>
+        </div>
+
+        <div class="content">
+            <div class="highlight">
+                <p><strong>Tu privacidad es nuestra prioridad.</strong> Esta política explica qué información
+                    recopilamos, cómo la usamos y cómo la protegemos. En resumen: recopilamos solo lo necesario para
+                    ofrecerte el servicio y nunca vendemos tus datos.</p>
+            </div>
+
+            <h2>1. Información que Recopilamos</h2>
+
+            <h3>1.1 Información que nos Proporcionas</h3>
+            <p>Cuando te registras en Vaulta, recopilamos:</p>
+            <ul>
+                <li><strong>Información de cuenta:</strong> Nombre, dirección de correo electrónico, DNI, banco
+                    principal</li>
+                <li><strong>Información financiera:</strong> Nombres de cuentas, saldos, movimientos, categorías de
+                    gastos</li>
+                <li><strong>Contraseña:</strong> Almacenada de forma segura usando encriptación bcrypt</li>
+            </ul>
+
+            <h3>1.2 Información Recopilada Automáticamente</h3>
+            <p>Cuando usas Vaulta, podemos recopilar automáticamente:</p>
+            <ul>
+                <li><strong>Datos de uso:</strong> Páginas visitadas, funciones utilizadas, tiempo de uso</li>
+                <li><strong>Información técnica:</strong> Tipo de navegador, dispositivo, dirección IP</li>
+                <li><strong>Cookies:</strong> Para mantener tu sesión activa y mejorar la experiencia</li>
+            </ul>
+
+            <h2>2. Cómo Usamos tu Información</h2>
+            <p>Utilizamos la información recopilada para:</p>
+            <ul>
+                <li><strong>Proporcionar el servicio:</strong> Gestionar tu cuenta y permitir las funcionalidades de
+                    Vaulta</li>
+                <li><strong>Mejorar la plataforma:</strong> Entender cómo se usa el servicio y optimizarlo</li>
+                <li><strong>Seguridad:</strong> Detectar y prevenir fraudes o uso no autorizado</li>
+                <li><strong>Comunicaciones:</strong> Enviarte actualizaciones importantes sobre el servicio</li>
+                <li><strong>Cumplimiento legal:</strong> Cuando sea requerido por ley</li>
+            </ul>
+
+            <div class="warning">
+                <p><strong>Nunca compartimos ni vendemos tus datos personales a terceros con fines comerciales.</strong>
+                </p>
+            </div>
+
+            <h2>3. Cómo Protegemos tu Información</h2>
+            <p>Implementamos múltiples medidas de seguridad:</p>
+
+            <h3>3.1 Seguridad Técnica</h3>
+            <ul>
+                <li><strong>Encriptación de contraseñas:</strong> Usamos bcrypt para hashear todas las contraseñas</li>
+                <li><strong>Transmisión segura:</strong> Todas las comunicaciones usan protocolos HTTPS</li>
+                <li><strong>Protección de sesiones:</strong> Tokens de sesión seguros con expiración automática</li>
+                <li><strong>Validación de datos:</strong> Prevención de inyección SQL y XSS</li>
+            </ul>
+
+            <h3>3.2 Seguridad Organizativa</h3>
+            <ul>
+                <li>Acceso limitado a datos personales solo al personal autorizado</li>
+                <li>Auditorías regulares de seguridad</li>
+                <li>Copias de seguridad automáticas y cifradas</li>
+            </ul>
+
+            <h2>4. Compartir Información</h2>
+            <p>Solo compartimos tu información en circunstancias limitadas:</p>
+
+            <h3>4.1 Con tu Consentimiento</h3>
+            <p>Cuando nos das permiso explícito para compartir cierta información.</p>
+
+            <h3>4.2 Proveedores de Servicios</h3>
+            <p>Podemos compartir datos con proveedores que nos ayudan a operar el servicio (hosting, análisis), siempre
+                bajo acuerdos estrictos de confidencialidad.</p>
+
+            <h3>4.3 Requisitos Legales</h3>
+            <p>Cuando sea necesario para cumplir con la ley, órdenes judiciales o procesos legales.</p>
+
+            <h2>5. Tus Derechos</h2>
+            <p>Según el RGPD (Reglamento General de Protección de Datos), tienes derecho a:</p>
+
+            <h3>5.1 Derecho de Acceso</h3>
+            <p>Puedes solicitar una copia de todos los datos personales que tenemos sobre ti.</p>
+
+            <h3>5.2 Derecho de Rectificación</h3>
+            <p>Puedes actualizar o corregir tu información desde tu perfil en cualquier momento.</p>
+
+            <h3>5.3 Derecho de Supresión</h3>
+            <p>Puedes eliminar tu cuenta y todos tus datos permanentemente desde la configuración de tu perfil.</p>
+
+            <h3>5.4 Derecho de Portabilidad</h3>
+            <p>Puedes solicitar una exportación de tus datos en formato estructurado.</p>
+
+            <h3>5.5 Derecho de Oposición</h3>
+            <p>Puedes oponerte al procesamiento de tus datos en ciertas circunstancias.</p>
+
+            <h2>6. Cookies y Tecnologías Similares</h2>
+            <p>Vaulta utiliza cookies para:</p>
+            <ul>
+                <li><strong>Cookies esenciales:</strong> Necesarias para el funcionamiento básico (sesión de usuario)
+                </li>
+                <li><strong>Cookies de rendimiento:</strong> Para entender cómo se usa la plataforma</li>
+            </ul>
+            <p>Puedes configurar tu navegador para rechazar cookies, pero esto puede afectar la funcionalidad del
+                servicio.</p>
+
+            <h2>7. Retención de Datos</h2>
+            <p>Conservamos tu información personal mientras:</p>
+            <ul>
+                <li>Tu cuenta esté activa</li>
+                <li>Sea necesario para proporcionar el servicio</li>
+                <li>Tengamos obligaciones legales de conservación</li>
+            </ul>
+            <p>Cuando eliminas tu cuenta, todos tus datos se eliminan permanentemente de nuestros sistemas activos en un
+                plazo de 30 días.</p>
+
+            <h2>8. Transferencias Internacionales</h2>
+            <p>Tus datos se almacenan en servidores ubicados en la Unión Europea. Si necesitamos transferir datos fuera
+                de la UE, lo haremos bajo mecanismos de protección adecuados como las Cláusulas Contractuales Tipo.</p>
+
+            <h2>9. Menores de Edad</h2>
+            <p>Vaulta no está dirigido a menores de 18 años. No recopilamos intencionalmente información de menores. Si
+                descubrimos que hemos recopilado datos de un menor, los eliminaremos inmediatamente.</p>
+
+            <h2>10. Cambios en esta Política</h2>
+            <p>Podemos actualizar esta Política de Privacidad ocasionalmente. Te notificaremos de cambios significativos
+                a través de:</p>
+            <ul>
+                <li>Un aviso destacado en la plataforma</li>
+                <li>Un correo electrónico a tu dirección registrada</li>
+            </ul>
+
+            <h2>11. Contacto y Ejercicio de Derechos</h2>
+            <p>Para cualquier pregunta sobre esta política o para ejercer tus derechos, contacta con nosotros:</p>
+            <p>
+                <strong>Responsable de Protección de Datos:</strong> Vaulta Technologies<br>
+                <strong>Email:</strong> privacy@vaulta.com<br>
+                <strong>Dirección:</strong> Calle de la Privacidad 123, 28001 Madrid, España<br>
+                <strong>Teléfono:</strong> +34 900 123 456
+            </p>
+
+            <div class="highlight">
+                <p><strong>Autoridad de Control:</strong> Si consideras que no hemos atendido adecuadamente tus
+                    derechos, puedes presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD) en
+                    <a href="https://www.aepd.es" target="_blank"
+                        style="color: #007bff; text-decoration: none; font-weight: 600;">www.aepd.es</a></p>
+            </div>
+
+            <div class="highlight">
+                <p><strong>Última revisión:</strong> 10 de febrero de 2026</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

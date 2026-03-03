@@ -1,0 +1,286 @@
+<?php
+session_start();
+require 'conexion.php';
+require_once 'security.php';
+
+// ── PROCESAR POST ────────────────────────────────────────────────────────────
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    validate_csrf_token();
+
+    $nombre = trim($_POST['nombre']);
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+    $dni = trim($_POST['dni']);
+    $banco = trim($_POST['banco']);
+
+    if (empty($nombre) || empty($email) || empty($password) || empty($dni) || empty($banco)) {
+        header("Location: register.php?error=empty_fields");
+        exit;
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        header("Location: register.php?error=invalid_email");
+        exit;
+    }
+
+    function validarDNI($dni) {
+        $dni = strtoupper(trim($dni));
+        if (!preg_match('/^[0-9]{8}[A-Z]$/', $dni) && !preg_match('/^[XYZ][0-9]{7}[A-Z]$/', $dni)) {
+            return false;
+        }
+        $letras = 'TRWAGMYFPDXBNJZSQVHLCKE';
+        if (preg_match('/^[XYZ]/', $dni)) {
+            $nie_conversion = ['X' => '0', 'Y' => '1', 'Z' => '2'];
+            $numero = $nie_conversion[$dni[0]] . substr($dni, 1, 7);
+        } else {
+            $numero = substr($dni, 0, 8);
+        }
+        return $letras[intval($numero) % 23] === substr($dni, -1);
+    }
+
+    if (!validarDNI($dni)) {
+        header("Location: register.php?error=invalid_dni");
+        exit;
+    }
+
+    $stmt = $pdo->prepare("SELECT id FROM USUARIOS WHERE email = ?");
+    $stmt->execute([$email]);
+    if ($stmt->fetch()) {
+        header("Location: register.php?error=email_exists");
+        exit;
+    }
+
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+    try {
+        $stmt = $pdo->prepare("INSERT INTO USUARIOS (nombre, email, password, DNI, banco) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$nombre, $email, $password_hash, $dni, $banco]);
+        header("Location: login.php?registered=1");
+        exit;
+    } catch (PDOException $e) {
+        error_log("Error registro: " . $e->getMessage());
+        header("Location: register.php?error=db_error");
+        exit;
+    }
+}
+
+// ── MOSTRAR FORMULARIO (GET) ─────────────────────────────────────────────────
+generate_csrf_token();
+?>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <title>Registro | Vaulta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #002366 0%, #007bff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-wrapper { width: 100%; max-width: 480px; }
+        .login-box {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            animation: slideUp 0.5s ease-out;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .login-header { text-align: center; margin-bottom: 30px; }
+        .login-header h2 { color: #007bff; font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+        .login-header p { color: #6b7280; font-size: 14px; }
+        .alert-error {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+        .alert-error.show { display: block; animation: shake 0.5s; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .login-form { display: flex; flex-direction: column; gap: 15px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        .input-group label { color: #374151; font-size: 14px; font-weight: 600; }
+        .input-wrapper { position: relative; }
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 16px;
+        }
+        .input-wrapper input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+            outline: none;
+        }
+        .input-wrapper input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        .login-link {
+            color: #007bff; font-size: 14px; text-decoration: none;
+            display: block; text-align: center; margin-top: 15px;
+            transition: color 0.3s;
+        }
+        .login-link:hover { color: #002366; text-decoration: underline; }
+        .btn-submit {
+            background: linear-gradient(135deg, #002366 0%, #007bff 100%);
+            color: white; border: none; padding: 16px;
+            border-radius: 8px; font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; margin-top: 10px;
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 123, 255, 0.4); }
+        .btn-submit:active { transform: translateY(0); }
+        .login-footer { margin-top: 30px; text-align: center; padding-top: 20px; border-top: 1px solid #e5e7eb; }
+        .login-footer p { color: #6b7280; font-size: 12px; }
+    </style>
+</head>
+
+<body>
+    <div class="login-wrapper">
+        <div class="login-box">
+            <div class="login-header">
+                <img src="images/logotrans.png" alt="Vaulta Logo" style="height: 60px; margin-bottom: 15px;">
+                <p>Crea tu cuenta en Vaulta</p>
+            </div>
+
+            <div class="alert-error" id="errorAlert">
+                <i class="fas fa-exclamation-circle"></i> Error al registrar usuario
+            </div>
+
+            <form action="register.php" method="POST" class="login-form">
+                <?php echo csrf_field(); ?>
+
+                <div class="input-group">
+                    <label for="nombre">Nombre Completo</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="nombre" name="nombre" placeholder="Ej. Juan Pérez" required autofocus>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="dni">DNI</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-id-card input-icon"></i>
+                        <input type="text" id="dni" name="dni" placeholder="12345678X" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="banco">Banco Principal</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-university input-icon"></i>
+                        <input type="text" id="banco" name="banco" placeholder="Ej. Santander, BBVA..." required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Contraseña</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="password" name="password" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Crear Cuenta</button>
+            </form>
+
+            <a href="login.php" class="login-link">¿Ya tienes cuenta? Inicia Sesión</a>
+
+            <div class="login-footer">
+                <p>Al registrarte aceptas nuestros términos y condiciones.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        if (error) {
+            const alertEl = document.getElementById('errorAlert');
+            alertEl.classList.add('show');
+            const msgs = {
+                'email_exists': 'El email ya está registrado',
+                'invalid_email': 'El formato del email no es válido',
+                'invalid_dni': 'El DNI/NIE no es válido'
+            };
+            alertEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + (msgs[error] || 'Ocurrió un error al registrar');
+        }
+
+        function validarEmail(e) { return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(e); }
+        function validarDNI(d) {
+            d = d.toUpperCase().trim();
+            if (!/^[0-9]{8}[A-Z]$/.test(d) && !/^[XYZ][0-9]{7}[A-Z]$/.test(d)) return false;
+            const letras = 'TRWAGMYFPDXBNJZSQVHLCKE';
+            const n = /^[XYZ]/.test(d) ? ({'X':'0','Y':'1','Z':'2'}[d[0]] + d.substr(1,7)) : d.substr(0,8);
+            return letras[parseInt(n) % 23] === d.slice(-1);
+        }
+
+        const emailInput = document.getElementById('email');
+        const dniInput = document.getElementById('dni');
+
+        emailInput.addEventListener('blur', function() {
+            if (this.value && !validarEmail(this.value)) {
+                this.style.borderColor = '#ef4444';
+            } else { this.style.borderColor = '#e5e7eb'; }
+        });
+
+        dniInput.addEventListener('blur', function() {
+            if (this.value && !validarDNI(this.value)) {
+                this.style.borderColor = '#ef4444';
+            } else { this.style.borderColor = '#e5e7eb'; }
+        });
+
+        dniInput.addEventListener('input', function() { this.value = this.value.toUpperCase(); });
+
+        document.querySelector('.login-form').addEventListener('submit', function(e) {
+            const alertEl = document.getElementById('errorAlert');
+            alertEl.classList.remove('show');
+            if (!validarEmail(emailInput.value)) {
+                alertEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Introduce un email válido';
+                alertEl.classList.add('show'); emailInput.focus(); e.preventDefault(); return;
+            }
+            if (!validarDNI(dniInput.value)) {
+                alertEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> El DNI/NIE no es válido';
+                alertEl.classList.add('show'); dniInput.focus(); e.preventDefault(); return;
+            }
+        });
+    </script>
+</body>
+</html>

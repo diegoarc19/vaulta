@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguridad | Vaulta</title>
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.8;
+            color: #2d3748;
+            background: #f9fafb;
+        }
+
+        .navbar {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .back-btn {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            color: #002366;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #002366 0%, #007bff 100%);
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 22px;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: -4rem auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .security-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .security-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 35, 102, 0.12);
+        }
+
+        .security-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #002366 0%, #007bff 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-size: 32px;
+        }
+
+        .security-card h3 {
+            font-size: 22px;
+            color: #1a202c;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .security-card p {
+            color: #4a5568;
+            margin-bottom: 1.25rem;
+            line-height: 1.7;
+        }
+
+        .security-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .security-card li {
+            padding: 0.5rem 0;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .security-card li i {
+            color: #10b981;
+            font-size: 16px;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .content-section h2 {
+            font-size: 32px;
+            color: #1a202c;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+
+        .content-section h3 {
+            font-size: 22px;
+            color: #2d3748;
+            margin: 2rem 0 1rem 0;
+            font-weight: 700;
+        }
+
+        .content-section p {
+            color: #4a5568;
+            margin-bottom: 1.25rem;
+            font-size: 16px;
+        }
+
+        .content-section ul {
+            margin: 1rem 0 1.5rem 2rem;
+            color: #4a5568;
+        }
+
+        .content-section li {
+            margin-bottom: 0.75rem;
+        }
+
+        .highlight {
+            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .highlight strong {
+            color: #065f46;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ebf8ff;
+            color: #002366;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .security-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                margin-top: -2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="images/logotrans.png" alt="Vaulta">
+            </div>
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Volver al inicio
+            </a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Tu Seguridad es Nuestra Prioridad</h1>
+        <p>Protegemos tus datos financieros con las mejores prácticas de seguridad de la industria</p>
+    </section>
+
+    <div class="container">
+        <!-- Security Features Grid -->
+        <div class="security-grid">
+            <div class="security-card">
+                <div class="security-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3>Encriptación de Contraseñas</h3>
+                <p>Todas las contraseñas están protegidas con encriptación bcrypt, el estándar de la industria.</p>
+                <ul>
+                    <li><i class="fas fa-check"></i> Algoritmo bcrypt con salt único</li>
+                    <li><i class="fas fa-check"></i> Imposible recuperar contraseñas originales</li>
+                    <li><i class="fas fa-check"></i> Resistente a ataques de fuerza bruta</li>
+                </ul>
+            </div>
+
+            <div class="security-card">
+                <div class="security-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Protección de Datos</h3>
+                <p>Tus datos financieros están protegidos con múltiples capas de seguridad.</p>
+                <ul>
+                    <li><i class="fas fa-check"></i> Base de datos segura y aislada</li>
+                    <li><i class="fas fa-check"></i> Validación estricta de entradas</li>
+                    <li><i class="fas fa-check"></i> Protección contra inyección SQL</li>
+                </ul>
+            </div>
+
+            <div class="security-card">
+                <div class="security-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h3>Sesiones Seguras</h3>
+                <p>Sistema robusto de gestión de sesiones para proteger tu cuenta.</p>
+                <ul>
+                    <li><i class="fas fa-check"></i> Tokens de sesión únicos</li>
+                    <li><i class="fas fa-check"></i> Expiración automática de sesiones</li>
+                    <li><i class="fas fa-check"></i> Cierre seguro de sesión</li>
+                </ul>
+            </div>
+
+            <div class="security-card">
+                <div class="security-icon">
+                    <i class="fas fa-eye-slash"></i>
+                </div>
+                <h3>Privacidad Total</h3>
+                <p>Tu información financiera es completamente privada y nunca se comparte.</p>
+                <ul>
+                    <li><i class="fas fa-check"></i> Cero terceros con acceso a tus datos</li>
+                    <li><i class="fas fa-check"></i> Sin venta de información</li>
+                    <li><i class="fas fa-check"></i> Cumplimiento RGPD</li>
+                </ul>
+            </div>
+
+            <div class="security-card">
+                <div class="security-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <h3>Copias de Seguridad</h3>
+                <p>Tu información está respaldada regularmente para prevenir pérdida de datos.</p>
+                <ul>
+                    <li><i class="fas fa-check"></i> Backups automáticos diarios</li>
+                    <li><i class="fas fa-check"></i> Almacenamiento redundante</li>
+                    <li><i class="fas fa-check"></i> Recuperación ante desastres</li>
+                </ul>
+            </div>
+
+            <div class="security-card">
+                <div class="security-icon">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <h3>Auditorías Regulares</h3>
+                <p>Revisamos y mejoramos continuamente nuestras medidas de seguridad.</p>
+                <ul>
+                    <li><i class="fas fa-check"></i> Revisiones de código periódicas</li>
+                    <li><i class="fas fa-check"></i> Pruebas de penetración</li>
+                    <li><i class="fas fa-check"></i> Actualizaciones de seguridad</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Detailed Security Information -->
+        <div class="content-section">
+            <h2>Medidas de Seguridad Técnicas</h2>
+
+            <h3>1. Encriptación y Hashing</h3>
+            <p>Implementamos las mejores prácticas de criptografía:</p>
+            <ul>
+                <li><strong>Bcrypt para contraseñas:</strong> Todas las contraseñas se hashean con bcrypt usando un
+                    factor de coste de 10, generando hashes únicos con salt automatizado</li>
+                <li><strong>Transmisión segura:</strong> Todas las comunicaciones entre tu navegador y nuestros
+                    servidores utilizan HTTPS</li>
+                <li><strong>Almacenamiento seguro:</strong> Los datos sensibles están protegidos con capas adicionales
+                    de seguridad</li>
+            </ul>
+
+            <h3>2. Protección contra Amenazas Comunes</h3>
+            <p>Vaulta está protegido contra las vulnerabilidades más comunes:</p>
+            <ul>
+                <li><strong>Inyección SQL:</strong> Usamos sentencias preparadas (prepared statements) en todas las
+                    consultas a la base de datos</li>
+                <li><strong>Cross-Site Scripting (XSS):</strong> Todo el contenido generado por usuarios se sanitiza
+                    antes de mostrarse</li>
+                <li><strong>Cross-Site Request Forgery (CSRF):</strong> Implementamos tokens de protección en
+                    formularios críticos</li>
+                <li><strong>Fuerza bruta:</strong> Limitación de intentos de inicio de sesión y timeouts progresivos
+                </li>
+            </ul>
+
+            <h3>3. Gestión de Sesiones</h3>
+            <p>Sistema robusto de autenticación y sesiones:</p>
+            <ul>
+                <li>Tokens de sesión únicos generados de forma segura</li>
+                <li>Cookies seguras con flags HttpOnly y Secure</li>
+                <li>Regeneración de ID de sesión tras login exitoso</li>
+                <li>Cierre automático de sesiones inactivas</li>
+                <li>Destrucción completa de sesión al cerrar sesión</li>
+            </ul>
+
+            <div class="highlight">
+                <p><strong><i class="fas fa-shield-alt"></i> Garantía de Seguridad:</strong> Nos comprometemos a
+                    mantener tus datos seguros. Si detectamos cualquier brecha de seguridad, te notificaremos
+                    inmediatamente por email y tomaremos medidas correctivas de inmediato.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Responsabilidades Compartidas</h2>
+            <p>La seguridad es un esfuerzo conjunto. Aquí te mostramos cómo puedes proteger tu cuenta:</p>
+
+            <h3>Tu Parte en la Seguridad</h3>
+            <ul>
+                <li><strong>Usa contraseñas fuertes:</strong> Combina letras mayúsculas, minúsculas, números y símbolos.
+                    Evita información personal obvia</li>
+                <li><strong>No compartas tu contraseña:</strong> Nunca reveles tu contraseña a nadie, ni siquiera a
+                    soporte técnico</li>
+                <li><strong>Cierra sesión en dispositivos compartidos:</strong> Siempre cierra sesión cuando uses
+                    ordenadores públicos</li>
+                <li><strong>Mantén tu dispositivo seguro:</strong> Usa software antivirus actualizado y mantén tu
+                    sistema operativo al día</li>
+                <li><strong>Verifica la URL:</strong> Asegúrate de estar en el sitio oficial antes de introducir tus
+                    credenciales</li>
+                <li><strong>Reporta actividad sospechosa:</strong> Si notas algo inusual en tu cuenta, contacta
+                    inmediatamente con soporte</li>
+            </ul>
+
+            <h3>Nuestra Parte</h3>
+            <ul>
+                <li>Mantener la infraestructura actualizada y parcheada</li>
+                <li>Monitorear amenazas de seguridad constantemente</li>
+                <li>Implementar nuevas medidas de protección según evolucionan las amenazas</li>
+                <li>Responder rápidamente a incidentes de seguridad</li>
+                <li>Educar a los usuarios sobre mejores prácticas de seguridad</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Certificaciones y Cumplimiento</h2>
+            <p>Vaulta cumple con los siguientes estándares y regulaciones:</p>
+
+            <div style="margin: 2rem 0;">
+                <span class="badge"><i class="fas fa-check-circle"></i> RGPD Compliance</span>
+                <span class="badge"><i class="fas fa-check-circle"></i> Mejores Prácticas OWASP</span>
+                <span class="badge"><i class="fas fa-check-circle"></i> ISO 27001 Guidelines</span>
+                <span class="badge"><i class="fas fa-check-circle"></i> SOC 2 Type II Principles</span>
+            </div>
+
+            <h3>Reportar Vulnerabilidades</h3>
+            <p>Si descubres una vulnerabilidad de seguridad en Vaulta, te animamos a que nos lo comuniques de forma
+                responsable:</p>
+            <ul>
+                <li><strong>Email:</strong> security@vaulta.com</li>
+                <li><strong>Respuesta:</strong> Confirmación en 48 horas</li>
+                <li><strong>Resolución:</strong> Análisis y corrección prioritaria</li>
+                <li><strong>Reconocimiento:</strong> Agradecimiento público (opcional)</li>
+            </ul>
+
+            <div class="highlight">
+                <p><strong><i class="fas fa-clock"></i> Actualizaciones de Seguridad:</strong> Aplicamos parches de
+                    seguridad críticos en menos de 24 horas tras su identificación. Las actualizaciones menores se
+                    despliegan en mantenimientos programados semanales.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Preguntas Frecuentes sobre Seguridad</h2>
+
+            <h3>¿Están mis datos financieros seguros?</h3>
+            <p>Sí. Implementamos múltiples capas de seguridad incluyendo encriptación de contraseñas, validación de
+                datos, sesiones seguras y protección contra amenazas comunes. Tus datos nunca se comparten con terceros.
+            </p>
+
+            <h3>¿Pueden los administradores ver mis contraseñas?</h3>
+            <p>No. Las contraseñas están hasheadas con bcrypt, lo que significa que son irreversibles. Ni siquiera los
+                administradores pueden ver las contraseñas originales.</p>
+
+            <h3>¿Qué pasa si olvido mi contraseña?</h3>
+            <p>Actualmente debes contactar con soporte para restablecer tu contraseña. Estamos trabajando en un sistema
+                automatizado de recuperación segura.</p>
+
+            <h3>¿Puedo ver quién accede a mi cuenta?</h3>
+            <p>Esta funcionalidad está en desarrollo. Planeamos añadir un registro de actividad de cuenta que muestre
+                inicios de sesión y cambios importantes.</p>
+
+            <h3>¿Hacen copias de seguridad de mis datos?</h3>
+            <p>Sí. Realizamos copias de seguridad automáticas diarias. Sin embargo, también recomendamos que exportes
+                tus datos periódicamente como precaución adicional.</p>
+        </div>
+    </div>
+</body>
+
+</html>
