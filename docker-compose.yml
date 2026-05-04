@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.nginx
+    restart: unless-stopped
     ports:
       - "8080:80" # HTTP  → redirige automáticamente a HTTPS
       - "8443:443" # HTTPS → acceso seguro con certificado SSL
@@ -19,6 +20,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.php
+    restart: unless-stopped
     volumes:
       - ./src:/usr/share/nginx/html
     depends_on:
@@ -27,6 +29,7 @@ services:
   # BASE DE DATOS (MySQL)
   db:
     image: mysql:5.7
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: finanzas_app
@@ -39,6 +42,7 @@ services:
   # GESTOR VISUAL (phpMyAdmin)
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: root
@@ -50,6 +54,7 @@ services:
   # MAILHOG (Captura emails de testing)
   mailhog:
     image: mailhog/mailhog
+    restart: unless-stopped
     ports:
       - "8025:8025"   # Interfaz web para ver emails
       - "1025:1025"   # Puerto SMTP
