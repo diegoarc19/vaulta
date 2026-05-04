@@ -5,6 +5,11 @@ services:
       context: .
       dockerfile: Dockerfile.nginx
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-kf", "https://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     ports:
       - "8080:80" # HTTP  → redirige automáticamente a HTTPS
       - "8443:443" # HTTPS → acceso seguro con certificado SSL
@@ -21,6 +26,11 @@ services:
       context: .
       dockerfile: Dockerfile.php
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "php", "-r", "echo 'ok';"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     volumes:
       - ./src:/usr/share/nginx/html
     depends_on:
@@ -30,6 +40,11 @@ services:
   db:
     image: mysql:5.7
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: finanzas_app
@@ -43,6 +58,11 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: root
@@ -55,6 +75,11 @@ services:
   mailhog:
     image: mailhog/mailhog
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8025"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     ports:
       - "8025:8025"   # Interfaz web para ver emails
       - "1025:1025"   # Puerto SMTP
