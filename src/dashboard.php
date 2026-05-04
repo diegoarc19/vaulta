@@ -414,6 +414,15 @@ $recurrentes = $stmt->fetchAll();
         .transactions-table td {
             padding: 15px 12px;
             border-bottom: 1px solid #e2e8f0;
+            vertical-align: middle;
+        }
+
+        /* El .amount en las cards tiene 36px; en la tabla debe ser normal */
+        .transactions-table .amount {
+            font-size: 15px !important;
+            font-weight: 600;
+            text-align: right;
+            white-space: nowrap;
         }
 
         .transactions-table tr:hover {
@@ -540,6 +549,8 @@ $recurrentes = $stmt->fetchAll();
             border-color: #007bff;
         }
     </style>
+<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="dark-mode.css">
 </head>
 <body>
 
@@ -714,5 +725,6 @@ $recurrentes = $stmt->fetchAll();
         </main>
     </div>
 
+<script src="dark-mode.js"></script>
 </body>
 </html>

@@ -535,6 +535,8 @@ unset($cuenta);
             display: block;
         }
     </style>
+<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="dark-mode.css">
 </head>
 <body>
     <nav class="sidebar">
@@ -891,5 +893,6 @@ unset($cuenta);
             }
         });
     </script>
+<script src="dark-mode.js"></script>
 </body>
 </html>

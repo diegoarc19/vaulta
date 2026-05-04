@@ -358,6 +358,8 @@ unset($_SESSION['error']);
             color: #c53030;
         }
     </style>
+<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="dark-mode.css">
 </head>
 <body>
 
@@ -600,5 +602,6 @@ unset($_SESSION['error']);
         });
     </script>
 
+<script src="dark-mode.js"></script>
 </body>
 </html>

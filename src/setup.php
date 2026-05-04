@@ -124,6 +124,8 @@ $tiene_cuentas = count($cuentas) > 0;
             background: #e6fffa; border: 1px solid #b2f5ea; color: #285e61; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; display: flex; align-items: start; gap: 10px;
         }
     </style>
+<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="dark-mode.css">
 </head>
 <body>
 
@@ -192,5 +194,6 @@ $tiene_cuentas = count($cuentas) > 0;
     </div>
 </div>
 
+<script src="dark-mode.js"></script>
 </body>
 </html>

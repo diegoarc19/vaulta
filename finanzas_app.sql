@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: db
--- Tiempo de generación: 03-02-2026 a las 12:05:27
+-- Tiempo de generación: 28-04-2026 a las 09:46:42
 -- Versión del servidor: 5.7.44
 -- Versión de PHP: 8.3.26
 
@@ -31,16 +31,8 @@ CREATE TABLE `CUENTAS` (
   `id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
-  `saldo_inicial` decimal(10,2) DEFAULT '0.00'
+  `saldo_inicial` decimal(15,2) DEFAULT '0.00'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `CUENTAS`
---
-
-INSERT INTO `CUENTAS` (`id`, `usuario_id`, `nombre`, `saldo_inicial`) VALUES
-(1, 1, 'Cuenta Banco', 1500.00),
-(2, 1, 'Efectivo / Cartera', 50.00);
 
 -- --------------------------------------------------------
 
@@ -57,15 +49,6 @@ CREATE TABLE `MOVIMIENTOS` (
   `descripcion` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `MOVIMIENTOS`
---
-
-INSERT INTO `MOVIMIENTOS` (`id`, `cuenta_id`, `tipo_id`, `monto`, `fecha`, `descripcion`) VALUES
-(1, 1, 1, 1200.00, '2023-10-01', 'Nómina Octubre'),
-(2, 1, 2, 400.00, '2023-10-05', 'Pago Alquiler'),
-(3, 2, 3, 15.50, '2023-10-06', 'Cena Hamburguesas');
-
 -- --------------------------------------------------------
 
 --
@@ -79,16 +62,11 @@ CREATE TABLE `MOVIMIENTOS_RECURRENTES` (
   `monto` decimal(10,2) NOT NULL,
   `dia_cargo` int(11) NOT NULL,
   `periodicidad` enum('MENSUAL','ANUAL','SEMANAL') DEFAULT 'MENSUAL',
-  `activo` tinyint(1) DEFAULT '1'
+  `activo` tinyint(1) DEFAULT '1',
+  `fecha_especifica` date DEFAULT NULL,
+  `ultima_ejecucion` date DEFAULT NULL,
+  `proxima_ejecucion` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `MOVIMIENTOS_RECURRENTES`
---
-
-INSERT INTO `MOVIMIENTOS_RECURRENTES` (`id`, `cuenta_id`, `tipo_id`, `monto`, `dia_cargo`, `periodicidad`, `activo`) VALUES
-(1, 1, 2, 400.00, 5, 'MENSUAL', 1),
-(2, 1, 4, 12.99, 15, 'MENSUAL', 1);
 
 -- --------------------------------------------------------
 
@@ -103,16 +81,6 @@ CREATE TABLE `TIPOS_TRANSACCION` (
   `icono` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `TIPOS_TRANSACCION`
---
-
-INSERT INTO `TIPOS_TRANSACCION` (`id`, `nombre`, `naturaleza`, `icono`) VALUES
-(1, 'Nómina', 'INGRESO', 'fa-money-bill'),
-(2, 'Alquiler', 'GASTO', 'fa-home'),
-(3, 'Comida', 'GASTO', 'fa-burger'),
-(4, 'Netflix', 'GASTO', 'fa-film');
-
 -- --------------------------------------------------------
 
 --
@@ -124,15 +92,36 @@ CREATE TABLE `USUARIOS` (
   `nombre` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `DNI` varchar(9) NOT NULL
+  `DNI` varchar(9) NOT NULL,
+  `banco` varchar(50) NOT NULL,
+  `two_factor_enabled` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `USUARIOS`
+-- Estructura de tabla para la tabla `PASSWORD_RESETS`
 --
 
-INSERT INTO `USUARIOS` (`id`, `nombre`, `email`, `password`, `DNI`) VALUES
-(1, 'Carlos Estudiante', 'carlos@test.com', '123456', '12345678X');
+CREATE TABLE `PASSWORD_RESETS` (
+  `id` int(11) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `TWO_FACTOR_CODES`
+--
+
+CREATE TABLE `TWO_FACTOR_CODES` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `code` varchar(6) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Índices para tablas volcadas
@@ -175,6 +164,21 @@ ALTER TABLE `USUARIOS`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indices de la tabla `PASSWORD_RESETS`
+--
+ALTER TABLE `PASSWORD_RESETS`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `email` (`email`),
+  ADD KEY `token` (`token`);
+
+--
+-- Indices de la tabla `TWO_FACTOR_CODES`
+--
+ALTER TABLE `TWO_FACTOR_CODES`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -182,31 +186,43 @@ ALTER TABLE `USUARIOS`
 -- AUTO_INCREMENT de la tabla `CUENTAS`
 --
 ALTER TABLE `CUENTAS`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `MOVIMIENTOS`
 --
 ALTER TABLE `MOVIMIENTOS`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `MOVIMIENTOS_RECURRENTES`
 --
 ALTER TABLE `MOVIMIENTOS_RECURRENTES`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `TIPOS_TRANSACCION`
 --
 ALTER TABLE `TIPOS_TRANSACCION`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `USUARIOS`
 --
 ALTER TABLE `USUARIOS`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `PASSWORD_RESETS`
+--
+ALTER TABLE `PASSWORD_RESETS`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `TWO_FACTOR_CODES`
+--
+ALTER TABLE `TWO_FACTOR_CODES`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
@@ -231,6 +247,12 @@ ALTER TABLE `MOVIMIENTOS`
 ALTER TABLE `MOVIMIENTOS_RECURRENTES`
   ADD CONSTRAINT `MOVIMIENTOS_RECURRENTES_ibfk_1` FOREIGN KEY (`cuenta_id`) REFERENCES `CUENTAS` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `MOVIMIENTOS_RECURRENTES_ibfk_2` FOREIGN KEY (`tipo_id`) REFERENCES `TIPOS_TRANSACCION` (`id`);
+
+--
+-- Filtros para la tabla `TWO_FACTOR_CODES`
+--
+ALTER TABLE `TWO_FACTOR_CODES`
+  ADD CONSTRAINT `TWO_FACTOR_CODES_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `USUARIOS` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

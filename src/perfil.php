@@ -33,8 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_account'])) {
     exit;
 }
 
-// Conectar a la base de datos
-require 'conexion.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_profile'])) {
     validate_csrf_token();
     $nuevo_nombre = trim($_POST['nombre']);
@@ -79,6 +77,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['change_password'])) {
     }
 }
 
+// MANEJO DE TOGGLE 2FA
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['toggle_2fa'])) {
+    validate_csrf_token();
+    $new_state = (int)$_POST['two_factor_state'];
+    
+    $stmt = $pdo->prepare("UPDATE USUARIOS SET two_factor_enabled = ? WHERE id = ?");
+    $stmt->execute([$new_state, $user_id]);
+    
+    if ($new_state) {
+        $mensaje_exito = "Autenticación en 2 pasos activada correctamente";
+    } else {
+        $mensaje_exito = "Autenticación en 2 pasos desactivada";
+    }
+}
 
 // MANEJO DE ELIMINACIÓN DE CUENTA
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_account'])) {
@@ -174,6 +186,11 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute([$user_id]);
 $total_recurrentes = $stmt->fetchColumn();
+
+// Obtener estado 2FA del usuario
+$stmt = $pdo->prepare("SELECT two_factor_enabled FROM USUARIOS WHERE id = ?");
+$stmt->execute([$user_id]);
+$two_factor_enabled = (bool)$stmt->fetchColumn();
 ?>
 
 <!DOCTYPE html>
@@ -462,12 +479,6 @@ $total_recurrentes = $stmt->fetchColumn();
             gap: 25px;
         }
 
-        @media (max-width: 768px) {
-            .two-column {
-                grid-template-columns: 1fr;
-            }
-        }
-
         /* MODAL */
         .modal {
             display: none;
@@ -626,13 +637,358 @@ $total_recurrentes = $stmt->fetchColumn();
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(197, 48, 48, 0.4);
         }
+
+        /* HAMBURGER MENU BUTTON */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1500;
+            background: linear-gradient(135deg, #002366 0%, #007bff 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,35,102,0.3);
+            transition: all 0.3s;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle:active {
+            transform: scale(0.92);
+        }
+
+        /* SIDEBAR OVERLAY (mobile) */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.45);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+            opacity: 1;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: -280px;
+                height: 100%;
+                z-index: 1000;
+                width: 260px;
+                transition: left 0.3s ease;
+                overflow-y: auto;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .dashboard-wrapper {
+                flex-direction: column;
+            }
+
+            .main-content {
+                padding: 15px;
+                padding-top: 70px;
+            }
+
+            .top-bar {
+                padding: 18px 15px;
+                margin-bottom: 20px;
+            }
+
+            .welcome-text h1 {
+                font-size: 22px;
+            }
+
+            /* Stats: 2 columns on mobile */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+            .stat-card {
+                padding: 14px;
+            }
+
+            .stat-value {
+                font-size: 22px;
+            }
+
+            .stat-label {
+                font-size: 11px;
+            }
+
+            /* Two column → single column */
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .profile-section {
+                padding: 20px 15px;
+                margin-bottom: 15px;
+            }
+
+            .section-title {
+                font-size: 17px;
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+            }
+
+            /* Touch-friendly inputs */
+            .form-group input {
+                padding: 14px 12px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            /* Touch-friendly buttons */
+            .btn-primary,
+            .btn-danger,
+            .btn-add {
+                padding: 14px 20px;
+                font-size: 15px;
+                width: 100%;
+                text-align: center;
+            }
+
+            /* Account items: stack vertically */
+            .account-item {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 12px;
+            }
+
+            .account-info {
+                min-width: 0;
+                flex: 1 1 60%;
+            }
+
+            .account-balance {
+                font-size: 16px;
+                flex: 0 0 auto;
+            }
+
+            .btn-delete-account {
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .section-header .btn-add {
+                width: 100%;
+            }
+
+            /* Danger zone */
+            .danger-zone {
+                padding: 18px 14px;
+                margin-top: 15px;
+            }
+
+            /* Modal adjustments */
+            .modal-content {
+                width: 95%;
+                padding: 22px 18px;
+                border-radius: 12px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .modal-header h3 {
+                font-size: 18px;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+                gap: 8px;
+            }
+
+            .form-actions .btn-cancel,
+            .form-actions .btn-primary,
+            .form-actions .btn-danger {
+                width: 100%;
+                text-align: center;
+                padding: 14px;
+            }
+        }
+
+        /* Extra small phones */
+        @media (max-width: 380px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+
+            .main-content {
+                padding: 10px;
+                padding-top: 65px;
+            }
+
+            .account-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .account-balance {
+                width: 100%;
+            }
+        }
+
+        /* 2FA TOGGLE */
+        .two-fa-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .two-fa-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .two-fa-info {
+            flex: 1;
+        }
+
+        .two-fa-info h3 {
+            color: #2d3748;
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .two-fa-info p {
+            color: #718096;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 56px;
+            height: 30px;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e0;
+            transition: 0.3s;
+            border-radius: 30px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #002366 0%, #007bff 100%);
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .two-fa-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .two-fa-status.active {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .two-fa-status.inactive {
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+        @media (max-width: 768px) {
+            .two-fa-row {
+                flex-direction: row;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .two-fa-section {
+                padding: 20px 15px;
+            }
+        }
     </style>
+<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="dark-mode.css">
 </head>
 <body>
 
+    <!-- Hamburger menu button for mobile -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+        <i class="fas fa-bars" id="menuIcon"></i>
+    </button>
+    <!-- Sidebar overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="dashboard-wrapper">
 
-        <nav class="sidebar">
+        <nav class="sidebar" id="sidebar">
             <div class="brand">
                 <img src="images/logotrans.png" alt="Vaulta">
             </div>
@@ -657,20 +1013,23 @@ $total_recurrentes = $stmt->fetchColumn();
 
         <main class="main-content">
 
-            <header class="top-bar">
+            <header class="top-bar" style="display: flex; justify-content: space-between; align-items: center;">
                 <div class="welcome-text">
                     <h1>Mi Perfil</h1>
                     <p class="current-date">Gestiona tu información personal</p>
                 </div>
+                <button id="darkModeToggle" class="btn-dark-mode" aria-label="Alternar modo oscuro">
+                    <i class="fas fa-moon"></i>
+                </button>
             </header>
 
-            <?php if (isset($mensaje_exito)): ?>
+            <?php if (!empty($mensaje_exito)): ?>
             <div class="alert-success">
                 <i class="fas fa-check-circle"></i> <?php echo esc($mensaje_exito); ?>
             </div>
             <?php endif; ?>
 
-            <?php if (isset($mensaje_error)): ?>
+            <?php if (!empty($mensaje_error)): ?>
             <div class="alert-error">
                 <i class="fas fa-exclamation-circle"></i> <?php echo esc($mensaje_error); ?>
             </div>
@@ -751,7 +1110,32 @@ $total_recurrentes = $stmt->fetchColumn();
                 </div>
             </div>
 
-            <!-- MIS CUENTAS -->
+            <!-- AUTENTICACIÓN EN 2 PASOS -->
+            <div class="two-fa-section">
+                <h2 class="section-title"><i class="fas fa-shield-alt"></i> Autenticación en 2 Pasos</h2>
+                
+                <div class="two-fa-row">
+                    <div class="two-fa-info">
+                        <h3>Verificación por email</h3>
+                        <p>Cada vez que inicies sesión, te enviaremos un código de seguridad de 6 dígitos a tu email para verificar tu identidad.</p>
+                        <?php if ($two_factor_enabled): ?>
+                        <span class="two-fa-status active"><i class="fas fa-check-circle"></i> Activada</span>
+                        <?php else: ?>
+                        <span class="two-fa-status inactive"><i class="fas fa-times-circle"></i> Desactivada</span>
+                        <?php endif; ?>
+                    </div>
+                    <form method="POST" style="margin: 0; display: flex; align-items: center; justify-content: flex-end; min-width: 60px;">
+                        <?php echo csrf_field(); ?>
+                        <input type="hidden" name="toggle_2fa" value="1">
+                        <input type="hidden" name="two_factor_state" value="<?php echo $two_factor_enabled ? '0' : '1'; ?>">
+                        <label class="toggle-switch" style="margin: 0;">
+                            <input type="checkbox" <?php echo $two_factor_enabled ? 'checked' : ''; ?> onchange="this.form.submit()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </form>
+                </div>
+            </div>
+
             <div class="profile-section">
                 <div class="section-header">
                     <h2 class="section-title" style="margin: 0; padding: 0; border: none;"><i class="fas fa-wallet"></i> Mis Cuentas</h2>
@@ -869,6 +1253,9 @@ $total_recurrentes = $stmt->fetchColumn();
     </div>
 
     <script>
+        // Sidebar y dark mode: gestionados globalmente por dark-mode.js
+
+        // ── Modal functions ──
         function openModal() {
             document.getElementById('addAccountModal').classList.add('show');
         }
@@ -899,5 +1286,6 @@ $total_recurrentes = $stmt->fetchColumn();
         });
     </script>
 
+<script src="dark-mode.js"></script>
 </body>
 </html>

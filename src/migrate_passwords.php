@@ -55,14 +55,16 @@ if (!isset($_GET['key']) || $_GET['key'] !== MIGRATION_KEY) {
                 font-family: monospace;
             }
         </style>
-    </head>
+    <link rel="stylesheet" href="dark-mode.css">
+</head>
     <body>
         <div class="container">
             <h1>⛔ Acceso Denegado</h1>
             <p>Este script requiere una clave de acceso válida.</p>
             <p><strong>Uso:</strong> <code>migrate_passwords.php?key=CLAVE</code></p>
         </div>
-    </body>
+    <script src="dark-mode.js"></script>
+</body>
     </html>
     ');
 }
@@ -289,6 +291,7 @@ try {
             border-top: 1px solid #e2e8f0;
         }
     </style>
+<link rel="stylesheet" href="dark-mode.css">
 </head>
 <body>
     <div class="container">
@@ -345,5 +348,6 @@ try {
             </a>
         </div>
     </div>
+<script src="dark-mode.js"></script>
 </body>
 </html>

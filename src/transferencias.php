@@ -586,6 +586,8 @@ $transferencias_recientes = $stmt->fetchAll();
             }
         }
     </style>
+<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="dark-mode.css">
 </head>
 <body>
 
@@ -766,5 +768,6 @@ $transferencias_recientes = $stmt->fetchAll();
         </main>
     </div>
 
+<script src="dark-mode.js"></script>
 </body>
 </html>

@@ -202,6 +202,7 @@ generate_csrf_token(); // Asegura que el token existe en sesión
             font-size: 12px;
         }
     </style>
+<link rel="stylesheet" href="dark-mode.css">
 </head>
 
 <body>
@@ -243,7 +244,7 @@ generate_csrf_token(); // Asegura que el token existe en sesión
                 </div>
 
                 <div class="form-actions">
-                    <a href="#" class="forgot-pass">¿Olvidaste tu clave?</a>
+                    <a href="forgot_password.php" class="forgot-pass">¿Olvidaste tu clave?</a>
                 </div>
 
                 <button type="submit" class="btn-submit">
@@ -274,6 +275,7 @@ generate_csrf_token(); // Asegura que el token existe en sesión
         }
     </script>
 
+<script src="dark-mode.js"></script>
 </body>
 
 </html>

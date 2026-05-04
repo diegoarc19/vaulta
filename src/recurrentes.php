@@ -781,6 +781,8 @@ $recurrentes = $stmt->fetchAll();
             transform: translateY(-2px);
         }
     </style>
+<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="dark-mode.css">
 </head>
 <body>
 
@@ -1149,5 +1151,6 @@ $recurrentes = $stmt->fetchAll();
         });
     </script>
 
+<script src="dark-mode.js"></script>
 </body>
 </html>

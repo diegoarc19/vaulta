@@ -1,0 +1,784 @@
+/* =====================================================
+   VAULTA - DARK MODE CSS  (versión definitiva)
+   Se activa cuando <body> tiene la clase 'dark-mode'
+   Todos los selectores usan !important para ganar
+   a los estilos inline de los archivos PHP.
+   ===================================================== */
+
+/* -------------------------------------------------------
+   BASE
+------------------------------------------------------- */
+body.dark-mode,
+html.dark-mode body {
+    background: #0f1523 !important;
+    color: #cbd5e0 !important;
+}
+
+/* -------------------------------------------------------
+   SIDEBAR (presente en todas las páginas internas)
+------------------------------------------------------- */
+body.dark-mode .sidebar {
+    background: #111827 !important;
+    background-image: none !important;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.5) !important;
+    border-right: 1px solid #1f2937 !important;
+}
+
+body.dark-mode .brand {
+    border-bottom-color: #1f2937 !important;
+}
+
+body.dark-mode .nav-links a {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .nav-links a:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #e2e8f0 !important;
+    border-left-color: #3b82f6 !important;
+}
+
+body.dark-mode .nav-links li.active a {
+    background: rgba(59, 130, 246, 0.12) !important;
+    color: #60a5fa !important;
+    border-left-color: #60a5fa !important;
+}
+
+body.dark-mode .logout-section {
+    border-top-color: #1f2937 !important;
+}
+
+body.dark-mode .btn-logout {
+    background: rgba(239, 68, 68, 0.12) !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+    color: #fca5a5 !important;
+}
+
+body.dark-mode .btn-logout:hover {
+    background: rgba(239, 68, 68, 0.22) !important;
+}
+
+/* -------------------------------------------------------
+   FONDO PRINCIPAL (main-content area)
+------------------------------------------------------- */
+body.dark-mode .main-content {
+    background: #0f1523 !important;
+}
+
+/* -------------------------------------------------------
+   TOP BAR
+------------------------------------------------------- */
+body.dark-mode .top-bar {
+    background: #1a2235 !important;
+    border-color: #1f2937 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .welcome-text h1 {
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode .current-date,
+body.dark-mode .user-dni {
+    color: #64748b !important;
+}
+
+/* -------------------------------------------------------
+   TARJETAS / CONTENEDORES BLANCOS
+   (stat-card, profile-section, movements-section, etc.)
+------------------------------------------------------- */
+body.dark-mode .stat-card,
+body.dark-mode .card,
+body.dark-mode .balance-card,
+body.dark-mode .expense-card,
+body.dark-mode .profile-section,
+body.dark-mode .two-fa-section,
+body.dark-mode .danger-zone,
+body.dark-mode .movements-section,
+body.dark-mode .filters-section,
+body.dark-mode .recent-transactions,
+body.dark-mode .recurring-payments,
+body.dark-mode .filter-section,
+body.dark-mode .white-box,
+body.dark-mode .setup-container,
+body.dark-mode .chart-container,
+body.dark-mode .widget,
+body.dark-mode .section-card,
+/* prevision.php */
+body.dark-mode .section,
+body.dark-mode .proyeccion-card,
+body.dark-mode .recurrente-item,
+/* transferencias.php */
+body.dark-mode .transfer-section,
+body.dark-mode .account-card,
+body.dark-mode .recent-transfers,
+/* recurrentes.php */
+body.dark-mode .recurring-section,
+body.dark-mode .recurring-card,
+body.dark-mode .account-selector-section .selector-card {
+    background: #1a2235 !important;
+    border-color: #1f2937 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Variante peligro */
+body.dark-mode .danger-zone {
+    background: rgba(127, 29, 29, 0.12) !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* -------------------------------------------------------
+   ACCOUNT ITEM (perfil.php)
+------------------------------------------------------- */
+body.dark-mode .account-item {
+    background: #1f2d42 !important;
+    border-left-color: #3b82f6 !important;
+}
+
+body.dark-mode .account-name {
+    color: #f1f5f9 !important;
+}
+
+/* -------------------------------------------------------
+   SECTION TITLE / HEADERS
+------------------------------------------------------- */
+body.dark-mode .section-title {
+    color: #f1f5f9 !important;
+    border-bottom-color: #1f2937 !important;
+}
+
+body.dark-mode .danger-zone .section-title {
+    color: #fca5a5 !important;
+    border-bottom-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+body.dark-mode .section-header h2,
+body.dark-mode .section-header h3 {
+    color: #f1f5f9 !important;
+}
+
+/* -------------------------------------------------------
+   TEXTO GENERAL
+------------------------------------------------------- */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5 {
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode p,
+body.dark-mode small,
+body.dark-mode .text-muted,
+body.dark-mode .stat-label,
+body.dark-mode .stat-title {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode strong {
+    color: #e2e8f0 !important;
+}
+
+/* stat-value sigue el color de la tarjeta */
+body.dark-mode .stat-value {
+    color: #f1f5f9 !important;
+}
+
+/* -------------------------------------------------------
+   FORMULARIOS
+------------------------------------------------------- */
+body.dark-mode label,
+body.dark-mode .form-group label,
+body.dark-mode .filter-group label,
+body.dark-mode .input-group label,
+body.dark-mode .code-input-wrapper label {
+    color: #cbd5e0 !important;
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="number"],
+body.dark-mode input[type="date"],
+body.dark-mode input[type="search"],
+body.dark-mode input[type="tel"],
+body.dark-mode .code-input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background: #111827 !important;
+    border-color: #374151 !important;
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #4b5563 !important;
+}
+
+body.dark-mode input:focus,
+body.dark-mode select:focus,
+body.dark-mode textarea:focus,
+body.dark-mode .code-input:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18) !important;
+}
+
+/* Auth pages input wrapper */
+body.dark-mode .input-wrapper input {
+    background: #111827 !important;
+    border-color: #374151 !important;
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode .input-icon {
+    color: #4b5563 !important;
+}
+
+/* -------------------------------------------------------
+   TABLAS
+------------------------------------------------------- */
+body.dark-mode .movements-table th,
+body.dark-mode .transactions-table th,
+body.dark-mode table th {
+    background: #111827 !important;
+    color: #64748b !important;
+    border-bottom-color: #1f2937 !important;
+}
+
+body.dark-mode .movements-table td,
+body.dark-mode .transactions-table td,
+body.dark-mode table td {
+    color: #cbd5e0 !important;
+    border-bottom-color: #1a2235 !important;
+}
+
+body.dark-mode .movements-table tr:hover,
+body.dark-mode .transactions-table tr:hover,
+body.dark-mode table tr:hover {
+    background: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Icon-box de la tabla */
+body.dark-mode .icon-box {
+    background: #1f2d42 !important;
+    color: #60a5fa !important;
+}
+
+/* -------------------------------------------------------
+   BOTONES SECUNDARIOS
+------------------------------------------------------- */
+body.dark-mode .btn-cancel {
+    background: #1f2d42 !important;
+    color: #cbd5e0 !important;
+    border: 1px solid #374151 !important;
+}
+
+body.dark-mode .btn-cancel:hover {
+    background: #263347 !important;
+}
+
+body.dark-mode .btn-delete,
+body.dark-mode .btn-delete-account {
+    background: rgba(239, 68, 68, 0.12) !important;
+    color: #fca5a5 !important;
+}
+
+body.dark-mode .btn-delete:hover,
+body.dark-mode .btn-delete-account:hover {
+    background: rgba(239, 68, 68, 0.25) !important;
+    color: #fff !important;
+}
+
+/* -------------------------------------------------------
+   MODALES
+------------------------------------------------------- */
+body.dark-mode .modal-content {
+    background: #1a2235 !important;
+    border: 1px solid #1f2937 !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.dark-mode .modal-header {
+    border-bottom-color: #1f2937 !important;
+}
+
+body.dark-mode .modal-header h3 {
+    color: #f1f5f9 !important;
+}
+
+/* -------------------------------------------------------
+   ALERTAS
+------------------------------------------------------- */
+body.dark-mode .alert-success,
+body.dark-mode .mensaje-exito {
+    background: rgba(34, 197, 94, 0.1) !important;
+    border-color: rgba(34, 197, 94, 0.3) !important;
+    color: #86efac !important;
+}
+
+body.dark-mode .alert-error,
+body.dark-mode .mensaje-error {
+    background: rgba(239, 68, 68, 0.1) !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+    color: #fca5a5 !important;
+}
+
+body.dark-mode .alert-warning {
+    background: rgba(245, 158, 11, 0.1) !important;
+    border-color: rgba(245, 158, 11, 0.3) !important;
+    color: #fcd34d !important;
+}
+
+body.dark-mode .info-alert,
+body.dark-mode .danger-warning {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .danger-warning p {
+    color: #fca5a5 !important;
+}
+
+/* -------------------------------------------------------
+   SELECTOR DE CUENTA (dashboard)
+------------------------------------------------------- */
+body.dark-mode .account-selector-section {
+    background: transparent !important;
+}
+
+/* -------------------------------------------------------
+   RECURRING ITEMS
+------------------------------------------------------- */
+body.dark-mode .recurring-item {
+    background: #1f2d42 !important;
+    border-color: #1f2937 !important;
+}
+
+body.dark-mode .rec-period {
+    color: #64748b !important;
+}
+
+/* -------------------------------------------------------
+   SETUP PAGE
+------------------------------------------------------- */
+body.dark-mode .setup-container {
+    background: #1a2235 !important;
+    border-color: #1f2937 !important;
+}
+
+body.dark-mode .setup-header {
+    background: rgba(59, 130, 246, 0.08) !important;
+    border-bottom-color: #1f2937 !important;
+    color: #e2e8f0 !important;
+}
+
+/* -------------------------------------------------------
+   PÁGINAS AUTH (login, forgot, reset, 2fa)
+   El body ya tiene background oscuro del selector base.
+------------------------------------------------------- */
+body.dark-mode .login-box,
+body.dark-mode .form-box {
+    background: #1a2235 !important;
+    border: 1px solid #1f2937 !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.dark-mode .login-header h2,
+body.dark-mode .form-header h2 {
+    color: #93c5fd !important;
+}
+
+body.dark-mode .login-header p,
+body.dark-mode .form-header p {
+    color: #64748b !important;
+}
+
+body.dark-mode .email-badge {
+    background: #1f2d42 !important;
+    color: #93c5fd !important;
+}
+
+body.dark-mode .forgot-pass,
+body.dark-mode .back-link,
+body.dark-mode .resend-btn {
+    color: #60a5fa !important;
+}
+
+body.dark-mode .forgot-pass:hover,
+body.dark-mode .back-link:hover,
+body.dark-mode .resend-btn:hover {
+    color: #93c5fd !important;
+}
+
+body.dark-mode .login-footer {
+    border-top-color: #1f2937 !important;
+}
+
+body.dark-mode .login-footer p {
+    color: #64748b !important;
+}
+
+body.dark-mode .password-rules {
+    background: #111827 !important;
+    border-color: #374151 !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .timer-info {
+    color: #64748b !important;
+}
+
+/* -------------------------------------------------------
+   TOGGLE BUTTON (se inyecta en .top-bar)
+------------------------------------------------------- */
+.btn-dark-mode {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.25s;
+    padding: 8px 10px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.btn-dark-mode:hover {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.08);
+}
+
+body.dark-mode .btn-dark-mode {
+    color: #f59e0b;
+}
+
+body.dark-mode .btn-dark-mode:hover {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.1);
+}
+
+/* -------------------------------------------------------
+   POSITIVO / NEGATIVO
+------------------------------------------------------- */
+body.dark-mode .positive,
+body.dark-mode .amount.positive,
+body.dark-mode .stat-value.positive,
+body.dark-mode .account-balance.positive {
+    color: #4ade80 !important;
+}
+
+body.dark-mode .negative,
+body.dark-mode .amount.negative,
+body.dark-mode .account-balance.negative {
+    color: #f87171 !important;
+}
+
+/* -------------------------------------------------------
+   SCROLLBAR
+------------------------------------------------------- */
+body.dark-mode ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+    background: #111827;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: #374151;
+    border-radius: 3px;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #4b5563;
+}
+
+/* -------------------------------------------------------
+   COLORES INLINE STYLE OVERRIDE
+   Algunos elementos tienen style="color: #718096" inline.
+   El !important del external CSS GANA sobre style inline
+   solo si el selector es igual o más específico.
+   Aquí forzamos con un selector de alta especificidad.
+------------------------------------------------------- */
+body.dark-mode td[style],
+body.dark-mode small[style],
+body.dark-mode span[style*="color: #718096"],
+body.dark-mode span[style*="color:#718096"] {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode h3[style*="color: #2d3748"],
+body.dark-mode h3[style*="color:#2d3748"],
+body.dark-mode p[style*="color: #718096"],
+body.dark-mode p[style*="color:#718096"] {
+    color: #cbd5e0 !important;
+}
+
+/* =======================================================
+   PREVISION.PHP � estilos especificos
+   ======================================================= */
+
+body.dark-mode .proyeccion-card {
+    background: #1f2d42 !important;
+    border-left-color: #3b82f6 !important;
+}
+body.dark-mode .proyeccion-card.alerta {
+    background: rgba(239, 68, 68, 0.08) !important;
+    border-left-color: #f87171 !important;
+}
+body.dark-mode .proyeccion-mes { color: #f1f5f9 !important; }
+body.dark-mode .proyeccion-gasto { color: #64748b !important; }
+
+body.dark-mode .recurrente-item {
+    background: #1f2d42 !important;
+    border-left-color: #3b82f6 !important;
+}
+body.dark-mode .recurrente-item.ingreso { border-left-color: #4ade80 !important; }
+body.dark-mode .recurrente-icon { background: #1a2235 !important; color: #60a5fa !important; }
+body.dark-mode .recurrente-details h4 { color: #f1f5f9 !important; }
+
+body.dark-mode .stat-card.primary {
+    background: linear-gradient(135deg, #1e3a6e 0%, #1a56db 100%) !important;
+}
+body.dark-mode .stat-card.success {
+    background: linear-gradient(135deg, #166534 0%, #16a34a 100%) !important;
+}
+body.dark-mode .stat-card.danger {
+    background: linear-gradient(135deg, #7f1d1d 0%, #dc2626 100%) !important;
+}
+
+/* =======================================================
+   TRANSFERENCIAS.PHP � estilos especificos
+   ======================================================= */
+
+body.dark-mode .account-card {
+    background: #1f2d42 !important;
+    border-left-color: #3b82f6 !important;
+}
+body.dark-mode .account-card-header h3 { color: #f1f5f9 !important; }
+body.dark-mode .account-initial { color: #64748b !important; }
+
+body.dark-mode .section-header { border-bottom-color: #1f2937 !important; }
+body.dark-mode .section-header i { color: #60a5fa !important; }
+
+body.dark-mode .transfers-table th {
+    background: #111827 !important;
+    color: #64748b !important;
+    border-bottom-color: #1f2937 !important;
+}
+body.dark-mode .transfers-table td {
+    color: #cbd5e0 !important;
+    border-bottom-color: #1a2235 !important;
+}
+body.dark-mode .transfers-table tr:hover { background: rgba(255,255,255,0.03) !important; }
+
+/* =======================================================
+   RECURRENTES.PHP � estilos especificos
+   ======================================================= */
+
+body.dark-mode .recurring-card {
+    background: #1f2d42 !important;
+    border-left-color: #3b82f6 !important;
+}
+body.dark-mode .recurring-card.inactive {
+    opacity: 0.5 !important;
+    border-left-color: #374151 !important;
+}
+body.dark-mode .rec-icon { background: #1a2235 !important; color: #60a5fa !important; }
+body.dark-mode .rec-name { color: #f1f5f9 !important; }
+body.dark-mode .rec-details { color: #64748b !important; border-top-color: #1f2937 !important; }
+
+body.dark-mode .btn-toggle {
+    background: #1f2d42 !important;
+    color: #94a3b8 !important;
+    border: 1px solid #374151 !important;
+}
+body.dark-mode .btn-toggle:hover { background: #263347 !important; }
+body.dark-mode .btn-toggle.active {
+    background: rgba(34, 197, 94, 0.15) !important;
+    color: #4ade80 !important;
+    border-color: rgba(34, 197, 94, 0.3) !important;
+}
+
+body.dark-mode .btn-delete-rec {
+    background: rgba(239, 68, 68, 0.12) !important;
+    color: #fca5a5 !important;
+}
+body.dark-mode .btn-delete-rec:hover {
+    background: rgba(239, 68, 68, 0.25) !important;
+    color: #fff !important;
+}
+
+body.dark-mode .estimador-link-small a {
+    background: #1f2d42 !important;
+    border-color: #374151 !important;
+    color: #60a5fa !important;
+}
+body.dark-mode .estimador-link-small a:hover {
+    background: #263347 !important;
+    border-color: #3b82f6 !important;
+}
+
+/* =======================================================
+   OBJETIVOS.PHP - estilos especificos
+   ======================================================= */
+
+/* Layout: objetivos usa sidebar fixed + margin-left en main-content */
+body.dark-mode .main-content {
+    background: #0f1523 !important;
+}
+
+/* Card principal de objetivos */
+body.dark-mode .content-grid .card {
+    background: #1a2235 !important;
+    border-color: #1f2937 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+}
+
+body.dark-mode .card h2 {
+    color: #f1f5f9 !important;
+}
+
+/* Goal cards - tienen gradiente propio, lo oscurecemos */
+body.dark-mode .goal-card {
+    background: linear-gradient(135deg, #1a2235 0%, #1e2d4a 100%) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+}
+
+body.dark-mode .goal-title {
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode .goal-description {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .goal-amounts .current {
+    color: #4ade80 !important;
+}
+
+body.dark-mode .goal-amounts .target {
+    color: #64748b !important;
+}
+
+body.dark-mode .progress-bar-container {
+    background: rgba(255,255,255,0.1) !important;
+}
+
+body.dark-mode .progress-percentage {
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode .goal-meta {
+    border-top-color: rgba(255,255,255,0.1) !important;
+}
+
+body.dark-mode .goal-date {
+    color: #64748b !important;
+}
+
+/* Botones de icono circulares */
+body.dark-mode .btn-icon {
+    background: #1f2d42 !important;
+    color: #94a3b8 !important;
+    border: 1px solid #374151 !important;
+}
+
+body.dark-mode .btn-icon:hover {
+    background: #3b82f6 !important;
+    color: white !important;
+    border-color: #3b82f6 !important;
+}
+
+body.dark-mode .btn-icon.delete:hover {
+    background: #ef4444 !important;
+    border-color: #ef4444 !important;
+}
+
+/* Modal de objetivos (usa .active en vez de .show) */
+body.dark-mode .modal.active .modal-content,
+body.dark-mode #goalModal .modal-content {
+    background: #1a2235 !important;
+    border: 1px solid #1f2937 !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6) !important;
+}
+
+body.dark-mode .modal-header h2 {
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode .close-modal {
+    color: #64748b !important;
+}
+
+body.dark-mode .close-modal:hover {
+    color: #f87171 !important;
+}
+
+/* Icon selector */
+body.dark-mode .icon-option {
+    border-color: #374151 !important;
+    background: #1f2d42 !important;
+}
+
+body.dark-mode .icon-option:hover {
+    border-color: #3b82f6 !important;
+}
+
+body.dark-mode .icon-option.selected {
+    background: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+}
+
+/* Alertas de objetivos (.alert.success / .alert.error) */
+body.dark-mode .alert.success {
+    background: rgba(34, 197, 94, 0.1) !important;
+    border-color: rgba(34, 197, 94, 0.3) !important;
+    color: #86efac !important;
+}
+
+body.dark-mode .alert.error {
+    background: rgba(239, 68, 68, 0.1) !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+    color: #fca5a5 !important;
+}
+
+/* Empty state de objetivos */
+body.dark-mode .empty-state h3 {
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode .empty-state i {
+    color: #374151 !important;
+}
+
+/* User profile widget en top-bar */
+body.dark-mode .user-dni {
+    color: #64748b !important;
+}
+
+/* =======================================================
+   DASHBOARD - fix tabla de ultimos movimientos
+   ======================================================= */
+
+/* Asegura que el amount en la tabla no herede 36px de .amount de las cards */
+body.dark-mode .transactions-table .amount {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+}
+
+/* Recurrentes en dashboard */
+body.dark-mode .rec-info strong {
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode .rec-amount {
+    color: #94a3b8 !important;
+}

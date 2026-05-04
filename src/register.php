@@ -161,6 +161,7 @@ generate_csrf_token();
         .login-footer { margin-top: 30px; text-align: center; padding-top: 20px; border-top: 1px solid #e5e7eb; }
         .login-footer p { color: #6b7280; font-size: 12px; }
     </style>
+<link rel="stylesheet" href="dark-mode.css">
 </head>
 
 <body>
@@ -282,5 +283,6 @@ generate_csrf_token();
             }
         });
     </script>
+<script src="dark-mode.js"></script>
 </body>
 </html>

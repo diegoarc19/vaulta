@@ -483,6 +483,8 @@ unset($proy);
             }
         }
     </style>
+<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="dark-mode.css">
 </head>
 <body>
 
@@ -777,5 +779,6 @@ unset($proy);
         const proyeccionChart = new Chart(ctx, config);
     </script>
 
+<script src="dark-mode.js"></script>
 </body>
 </html>

@@ -1,0 +1,466 @@
+/* =====================================================
+   VAULTA — RESPONSIVE.CSS
+   Sistema responsivo global para todas las páginas
+   Breakpoints: 768px (tablet), 480px (móvil)
+   ===================================================== */
+
+/* -------------------------------------------------------
+   HAMBURGER BUTTON (fijo, esquina superior izquierda)
+------------------------------------------------------- */
+.menu-toggle {
+    display: none;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 1100;
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #002366 0%, #007bff 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 35, 102, 0.35);
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.menu-toggle:active {
+    transform: scale(0.92);
+}
+
+/* -------------------------------------------------------
+   SIDEBAR OVERLAY (fondo oscuro al abrir sidebar)
+------------------------------------------------------- */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.sidebar-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* -------------------------------------------------------
+   TABLET (≤ 768px)
+------------------------------------------------------- */
+@media (max-width: 768px) {
+
+    /* Mostrar hamburguesa */
+    .menu-toggle {
+        display: flex;
+    }
+
+    /* --- SIDEBAR DESLIZANTE --- */
+    .sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: -280px !important;
+        height: 100% !important;
+        width: 260px !important;
+        z-index: 1050 !important;
+        overflow-y: auto !important;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .sidebar.open {
+        left: 0 !important;
+        box-shadow: 4px 0 30px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    /* --- LAYOUT PRINCIPAL --- */
+    .dashboard-wrapper {
+        flex-direction: column !important;
+    }
+
+    .main-content {
+        padding: 16px !important;
+        padding-top: 72px !important; /* espacio para hamburguesa */
+        width: 100% !important;
+    }
+
+    /* --- TOP BAR --- */
+    .top-bar {
+        flex-wrap: wrap !important;
+        padding: 14px 16px !important;
+        gap: 8px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .welcome-text h1 {
+        font-size: 20px !important;
+        margin-left: 4px !important;
+    }
+
+    .current-date {
+        font-size: 12px !important;
+    }
+
+    /* --- STATS GRID → 2 columnas en tablet --- */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .stat-card {
+        padding: 16px !important;
+    }
+
+    .stat-value {
+        font-size: 22px !important;
+    }
+
+    .stat-label {
+        font-size: 11px !important;
+    }
+
+    /* --- TABLAS: scroll horizontal --- */
+    .movements-section,
+    .recurring-section,
+    .recent-transfers,
+    .recent-transactions {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 16px !important;
+    }
+
+    .movements-table,
+    .transfers-table,
+    .transactions-table {
+        min-width: 600px !important;
+    }
+
+    /* --- GRIDS DE CARDS → 1 columna --- */
+    .proyecciones-grid,
+    .accounts-grid,
+    .recurring-grid,
+    .balance-overview,
+    .two-column {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    /* --- MODALES: más anchos y centrados --- */
+    .modal-content {
+        width: 95% !important;
+        max-width: 100% !important;
+        max-height: 88vh !important;
+        overflow-y: auto !important;
+        border-radius: 20px 20px 0 0 !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        margin: 0 !important;
+        padding: 20px !important;
+    }
+
+    .modal {
+        align-items: flex-end !important;
+    }
+
+    /* --- FORM GRID → 1 columna --- */
+    .form-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 !important;
+    }
+
+    /* --- SECTION HEADERS --- */
+    .section-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+    }
+
+    .section-header .btn-add,
+    .section-header button {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    /* --- FILTROS: wrap --- */
+    .filters-section,
+    .filter-section {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        padding: 14px 16px !important;
+    }
+
+    .filter-group {
+        flex: 1 1 140px !important;
+    }
+
+    .filter-group select,
+    .filter-group input {
+        width: 100% !important;
+    }
+
+    .btn-filter {
+        width: 100% !important;
+        margin-top: 4px !important;
+    }
+
+    /* --- BOTÓN FLOTANTE FAB --- */
+    .btn-add-float {
+        bottom: 20px !important;
+        right: 20px !important;
+        width: 54px !important;
+        height: 54px !important;
+        font-size: 20px !important;
+    }
+
+    /* --- ACCOUNT ITEMS (perfil) --- */
+    .account-item {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    /* --- SETUP PAGE --- */
+    .setup-container {
+        padding: 20px 16px !important;
+        margin: 10px !important;
+    }
+
+    /* --- ESTIMADOR BANNER --- */
+    .estimador-banner {
+        flex-direction: column !important;
+        gap: 16px !important;
+        padding: 20px !important;
+    }
+
+    .estimador-actions {
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+
+    .estimador-actions a,
+    .estimador-actions button,
+    .btn-estimador,
+    .btn-dismiss {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    /* --- DANGER ZONE --- */
+    .danger-zone {
+        padding: 16px !important;
+    }
+
+    /* --- BOTONES PRIMARIOS → touch-friendly --- */
+    .btn-primary,
+    .btn-danger,
+    .btn-add,
+    .btn-transfer,
+    .btn-submit {
+        padding: 14px 20px !important;
+        font-size: 15px !important;
+    }
+
+    /* --- DARK MODE TOGGLE en top-bar --- */
+    #darkModeToggle {
+        padding: 6px 8px !important;
+        font-size: 16px !important;
+    }
+
+    /* Estilo de tabla: hacer TD legibles */
+    .movements-table td,
+    .transfers-table td {
+        font-size: 13px !important;
+        padding: 10px 8px !important;
+    }
+
+    .movements-table th,
+    .transfers-table th {
+        font-size: 11px !important;
+        padding: 10px 8px !important;
+    }
+}
+
+/* -------------------------------------------------------
+   MÓVIL PEQUEÑO (≤ 480px)
+------------------------------------------------------- */
+@media (max-width: 480px) {
+
+    /* Stats → 1 columna en phone pequeño */
+    .stats-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .welcome-text h1 {
+        font-size: 18px !important;
+    }
+
+    .top-bar {
+        padding: 12px !important;
+    }
+
+    .stat-value {
+        font-size: 20px !important;
+    }
+
+    /* Proyección cards: más compactas */
+    .proyeccion-card {
+        padding: 14px !important;
+    }
+
+    .proyeccion-saldo {
+        font-size: 22px !important;
+    }
+
+    /* Recurring card compacta */
+    .recurring-card {
+        padding: 14px !important;
+    }
+
+    .rec-amount {
+        font-size: 20px !important;
+    }
+
+    /* Modal full screen en phone */
+    .modal-content {
+        width: 100% !important;
+        border-radius: 20px 20px 0 0 !important;
+    }
+}
+
+/* -------------------------------------------------------
+   DARK MODE + RESPONSIVE: hamburguesa en dark
+------------------------------------------------------- */
+body.dark-mode .menu-toggle,
+html.dark-mode .menu-toggle {
+    background: linear-gradient(135deg, #1e2a3a 0%, #1a56db 100%) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* -------------------------------------------------------
+   INDICADOR VISUAL: barra de scroll horizontal en tabla
+------------------------------------------------------- */
+.movements-section::after,
+.recent-transfers::after,
+.recurring-section::after {
+    content: '';
+    display: none;
+}
+
+@media (max-width: 768px) {
+    /* Hint de scroll: gradiente lateral derecho */
+    .movements-section,
+    .recent-transfers {
+        position: relative;
+    }
+}
+
+/* -------------------------------------------------------
+   BADGE scroll-hint en tablas (opcional, accesible)
+------------------------------------------------------- */
+.scroll-hint {
+    display: none;
+    font-size: 11px;
+    color: #94a3b8;
+    text-align: right;
+    margin-bottom: 6px;
+    padding-right: 4px;
+}
+
+@media (max-width: 768px) {
+    .scroll-hint {
+        display: block;
+    }
+}
+
+/* =======================================================
+   OBJETIVOS.PHP - layout especial (sidebar fixed + margin-left)
+   ======================================================= */
+
+@media (max-width: 768px) {
+    /* Objetivos usa margin-left en vez de flex */
+    .main-content {
+        margin-left: 0 !important;
+        padding-top: 72px !important;
+    }
+
+    /* Goals grid: 1 columna en movil */
+    .goals-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+
+    .goal-card {
+        padding: 18px !important;
+    }
+
+    .goal-title {
+        font-size: 17px !important;
+    }
+
+    /* Icon selector: mas columnas pequenas */
+    .icon-selector {
+        grid-template-columns: repeat(6, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    .icon-option {
+        width: 42px !important;
+        height: 42px !important;
+        font-size: 20px !important;
+    }
+
+    /* Modal de objetivos (usa clase active) */
+    .modal.active {
+        align-items: flex-end !important;
+    }
+
+    .modal.active .modal-content {
+        width: 100% !important;
+        border-radius: 20px 20px 0 0 !important;
+        max-height: 88vh !important;
+        overflow-y: auto !important;
+        padding: 24px 18px !important;
+    }
+
+    /* Botones en el formulario de objetivo */
+    #goalForm [style*="display: flex"] {
+        flex-direction: column !important;
+    }
+
+    /* Goal amounts */
+    .goal-amounts {
+        font-size: 13px !important;
+    }
+
+    .goal-meta {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    .goal-actions {
+        width: 100% !important;
+        justify-content: flex-end !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .icon-selector {
+        grid-template-columns: repeat(5, 1fr) !important;
+    }
+
+    .icon-option {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 18px !important;
+    }
+}

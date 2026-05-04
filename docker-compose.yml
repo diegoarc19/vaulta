@@ -32,6 +32,7 @@ services:
       MYSQL_DATABASE: finanzas_app
     volumes:
       - db_data:/var/lib/mysql
+      - ./finanzas_app.sql:/docker-entrypoint-initdb.d/finanzas_app.sql:ro
     ports:
       - "3306:3306"
 
@@ -45,6 +46,13 @@ services:
       - "8081:80"
     depends_on:
       - db
+
+  # MAILHOG (Captura emails de testing)
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"   # Interfaz web para ver emails
+      - "1025:1025"   # Puerto SMTP
 
 volumes:
   db_data:
