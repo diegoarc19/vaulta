@@ -11,7 +11,7 @@ Instala estos dos programas antes de empezar:
 | Herramienta | Enlace de descarga |
 |---|---|
 | **Docker Desktop** | https://www.docker.com/products/docker-desktop/ |
-| **Git** (opcional, para clonar) | https://git-scm.com/downloads |
+| **Git** (opcional, para clonar el repo) | https://git-scm.com/downloads |
 
 > Asegúrate de que Docker Desktop esté **abierto y ejecutándose** antes de continuar.
 
@@ -33,9 +33,23 @@ docker/
 
 ## Pasos para arrancar el proyecto
 
-### 1. Descomprimir / obtener el proyecto
+### 1. Obtener el proyecto
 
-Descomprime el ZIP en una carpeta de tu elección, por ejemplo `C:\ProyectoFinanzas\`.
+Elige una de estas dos opciones:
+
+**Opción A — Descargar como ZIP** (no requiere Git)
+
+1. Ve a https://github.com/diegoarc19/vaulta
+2. Haz clic en el botón verde **"Code"** → **"Download ZIP"**
+3. Descomprime el ZIP en una carpeta de tu elección, por ejemplo `C:\Vaulta\`
+4. Entra dentro de la carpeta descomprimida antes de continuar
+
+**Opción B — Clonar con Git** (requiere tener Git instalado)
+
+```bash
+git clone https://github.com/diegoarc19/vaulta.git
+cd vaulta
+```
 
 ### 2. Abrir una terminal en la carpeta del proyecto
 
