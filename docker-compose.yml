@@ -84,5 +84,15 @@ services:
       - "8025:8025"   # Interfaz web para ver emails
       - "1025:1025"   # Puerto SMTP
 
+  # UPTIME KUMA (Monitorización de servicios)
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    restart: unless-stopped
+    volumes:
+      - uptime_kuma_data:/app/data
+    ports:
+      - "3001:3001"
+
 volumes:
   db_data:
+  uptime_kuma_data:

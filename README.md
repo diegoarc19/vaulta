@@ -75,6 +75,7 @@ Una vez que los contenedores estén en marcha, abre el navegador:
 | **Aplicación principal** | https://localhost:8443 |
 | **phpMyAdmin** (gestor de BD) | http://localhost:8081 |
 | **MailHog** (bandeja de email de prueba) | http://localhost:8025 |
+| **Uptime Kuma** (monitorización) | http://localhost:3001 |
 
 > ⚠️ Al abrir la app, el navegador mostrará un aviso de seguridad por el certificado SSL autofirmado. Es normal en desarrollo local. Haz clic en **"Avanzado" → "Continuar igualmente"**.
 
