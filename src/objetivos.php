@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Verificar si el usuario está logueado
+// Verificar si el usuario estÃ¡ logueado
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header('Location: login.html');
     exit();
@@ -9,7 +9,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
 require_once 'conexion.php';
 
-// Obtener información del usuario
+// Obtener informaciÃ³n del usuario
 $usuario_id = $_SESSION['user_id'];
 $stmt = $pdo->prepare("SELECT nombre FROM USUARIOS WHERE id = ?");
 $stmt->execute([$usuario_id]);
@@ -37,6 +37,28 @@ foreach ($cuentas as &$cuenta) {
     $saldo_total += $cuenta['saldo_actual'];
 }
 unset($cuenta);
+
+// Calcular balance mensual neto desde recurrentes activos
+$stmt = $pdo->prepare("
+    SELECT mr.monto, mr.periodicidad, tt.naturaleza
+    FROM MOVIMIENTOS_RECURRENTES mr
+    JOIN TIPOS_TRANSACCION tt ON mr.tipo_id = tt.id
+    JOIN CUENTAS c ON mr.cuenta_id = c.id
+    WHERE c.usuario_id = ? AND mr.activo = 1
+");
+$stmt->execute([$usuario_id]);
+$recurrentes_todos = $stmt->fetchAll();
+
+$balance_mensual_neto = 0;
+foreach ($recurrentes_todos as $r) {
+    $mensual = match($r['periodicidad']) {
+        'MENSUAL' => (float)$r['monto'],
+        'SEMANAL' => (float)$r['monto'] * 4,
+        'ANUAL'   => (float)$r['monto'] / 12,
+        default   => 0
+    };
+    $balance_mensual_neto += ($r['naturaleza'] === 'INGRESO') ? $mensual : -$mensual;
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -549,7 +571,7 @@ unset($cuenta);
             <li><a href="movimientos.php">Movimientos</a></li>
             <li><a href="transferencias.php">Transferencias</a></li>
             <li><a href="recurrentes.php">Recurrentes</a></li>
-            <li><a href="prevision.php">Previsión</a></li>
+            <li><a href="prevision.php">PrevisiÃ³n</a></li>
             <li class="active"><a href="objetivos.php">Objetivos</a></li>
             <li><a href="perfil.php">Mi Perfil</a></li>
         </ul>
@@ -570,328 +592,151 @@ unset($cuenta);
                     <p class="current-date"><?php echo date('d/m/Y'); ?></p>
                 </div>
                 <div class="user-profile-widget">
-                    <span class="user-dni">Saldo Total: €<?php echo number_format($saldo_total, 2); ?></span>
+                    <span class="user-dni">Saldo Total: <?php echo number_format($saldo_total, 2, ',', '.'); ?> &euro;</span>
                     <div class="avatar-placeholder"><?php echo strtoupper(substr($usuario['nombre'], 0, 2)); ?></div>
                 </div>
             </header>
 
+            <!-- Contexto financiero real -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
+                <div style="background:linear-gradient(135deg,#002366,#007bff);color:white;padding:20px;border-radius:12px;">
+                    <div style="font-size:13px;opacity:.85;margin-bottom:6px;"><i class="fas fa-wallet"></i> Saldo total disponible</div>
+                    <div style="font-size:28px;font-weight:700;"><?php echo number_format($saldo_total, 2, ',', '.'); ?> &euro;</div>
+                </div>
+                <div style="background:linear-gradient(135deg,<?php echo $balance_mensual_neto>=0?'#38a169,#48bb78':'#c53030,#f56565'; ?>);color:white;padding:20px;border-radius:12px;">
+                    <div style="font-size:13px;opacity:.85;margin-bottom:6px;"><i class="fas fa-chart-line"></i> Balance neto mensual (recurrentes)</div>
+                    <div style="font-size:28px;font-weight:700;"><?php echo ($balance_mensual_neto >= 0 ? '+' : '') . number_format($balance_mensual_neto, 2, ',', '.'); ?> &euro;</div>
+                </div>
+                <div style="background:white;border:2px solid #e2e8f0;padding:20px;border-radius:12px;">
+                    <div style="font-size:13px;color:#718096;margin-bottom:6px;"><i class="fas fa-info-circle"></i> Cada objetivo muestra</div>
+                    <div style="font-size:13px;color:#2d3748;line-height:1.5;">Cu&aacute;nto cubre tu saldo actual y en cu&aacute;ntos meses lo alcanzar&iacute;as ahorrando mensualmente.</div>
+                </div>
+            </div>
+
         <div class="content-grid">
             <div class="card">
-                <div id="goalsHeader" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div id="goalsHeader" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
                     <h2>Mis Objetivos</h2>
-                    <button class="btn-primary" onclick="openModal()">
-                        <i class="fas fa-plus"></i> Nuevo Objetivo
-                    </button>
+                    <button class="btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Nuevo Objetivo</button>
                 </div>
-
                 <div id="alert" class="alert"></div>
-
-                <div id="goalsContainer" class="goals-grid">
-                    <!-- Los objetivos se cargarán aquí dinámicamente -->
-                </div>
-
-                <div id="emptyState" class="empty-state" style="display: none;">
+                <div id="goalsContainer" class="goals-grid"></div>
+                <div id="emptyState" class="empty-state" style="display:none;">
                     <i class="fas fa-bullseye"></i>
                     <h3>No tienes objetivos de ahorro</h3>
                     <p>Crea tu primer objetivo y comienza a planificar tu futuro financiero</p>
-                    <button class="btn-primary" onclick="openModal()">
-                        <i class="fas fa-plus"></i> Crear Primer Objetivo
-                    </button>
+                    <button class="btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Crear Primer Objetivo</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal para crear/editar objetivo -->
+    <!-- Modal -->
     <div id="goalModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle">Nuevo Objetivo de Ahorro</h2>
                 <button class="close-modal" onclick="closeModal()">&times;</button>
             </div>
-
             <form id="goalForm" onsubmit="saveGoal(event)">
                 <input type="hidden" id="goalId">
-
-                <div class="form-group">
-                    <label for="goalName">Nombre del Objetivo *</label>
-                    <input type="text" id="goalName" required placeholder="Ej: Vacaciones en Europa">
-                </div>
-
-                <div class="form-group">
-                    <label for="goalDescription">Descripción</label>
-                    <textarea id="goalDescription" placeholder="Describe tu objetivo..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="goalIcon">Icono</label>
+                <div class="form-group"><label>Nombre *</label><input type="text" id="goalName" required placeholder="Ej: Vacaciones"></div>
+                <div class="form-group"><label>Descripci&oacute;n</label><textarea id="goalDescription" placeholder="Describe tu objetivo..."></textarea></div>
+                <div class="form-group"><label>Icono</label>
                     <div class="icon-selector">
-                        <div class="icon-option" data-icon="🏖️" onclick="selectIcon(this)">🏖️</div>
-                        <div class="icon-option" data-icon="🏠" onclick="selectIcon(this)">🏠</div>
-                        <div class="icon-option" data-icon="🚗" onclick="selectIcon(this)">🚗</div>
-                        <div class="icon-option" data-icon="💍" onclick="selectIcon(this)">💍</div>
-                        <div class="icon-option" data-icon="🎓" onclick="selectIcon(this)">🎓</div>
-                        <div class="icon-option" data-icon="💼" onclick="selectIcon(this)">💼</div>
-                        <div class="icon-option" data-icon="🎮" onclick="selectIcon(this)">🎮</div>
-                        <div class="icon-option" data-icon="📱" onclick="selectIcon(this)">📱</div>
-                        <div class="icon-option" data-icon="💻" onclick="selectIcon(this)">💻</div>
-                        <div class="icon-option" data-icon="🎸" onclick="selectIcon(this)">🎸</div>
-                        <div class="icon-option" data-icon="⚡" onclick="selectIcon(this)">⚡</div>
-                        <div class="icon-option selected" data-icon="💰" onclick="selectIcon(this)">💰</div>
+                        <div class="icon-option" data-icon="&#127958;" onclick="selectIcon(this)">&#127958;</div>
+                        <div class="icon-option" data-icon="&#127968;" onclick="selectIcon(this)">&#127968;</div>
+                        <div class="icon-option" data-icon="&#128663;" onclick="selectIcon(this)">&#128663;</div>
+                        <div class="icon-option" data-icon="&#128141;" onclick="selectIcon(this)">&#128141;</div>
+                        <div class="icon-option" data-icon="&#127891;" onclick="selectIcon(this)">&#127891;</div>
+                        <div class="icon-option" data-icon="&#128188;" onclick="selectIcon(this)">&#128188;</div>
+                        <div class="icon-option" data-icon="&#127918;" onclick="selectIcon(this)">&#127918;</div>
+                        <div class="icon-option" data-icon="&#128241;" onclick="selectIcon(this)">&#128241;</div>
+                        <div class="icon-option" data-icon="&#128187;" onclick="selectIcon(this)">&#128187;</div>
+                        <div class="icon-option" data-icon="&#127928;" onclick="selectIcon(this)">&#127928;</div>
+                        <div class="icon-option" data-icon="&#9889;" onclick="selectIcon(this)">&#9889;</div>
+                        <div class="icon-option selected" data-icon="&#128176;" onclick="selectIcon(this)">&#128176;</div>
                     </div>
-                    <input type="hidden" id="goalIcon" value="💰">
+                    <input type="hidden" id="goalIcon" value="&#128176;">
                 </div>
-
-                <div class="form-group">
-                    <label for="goalTarget">Meta de Ahorro (€) *</label>
-                    <input type="number" id="goalTarget" step="0.01" min="0.01" required placeholder="5000.00">
-                </div>
-
-                <div class="form-group">
-                    <label for="goalCurrent">Ahorro Actual (€)</label>
-                    <input type="number" id="goalCurrent" step="0.01" min="0" value="0" placeholder="0.00">
-                </div>
-
-                <div class="form-group">
-                    <label for="goalDate">Fecha Objetivo</label>
-                    <input type="date" id="goalDate">
-                </div>
-
-                <div style="display: flex; gap: 10px; margin-top: 30px;">
-                    <button type="submit" class="btn-primary" style="flex: 1;">
-                        <i class="fas fa-save"></i> Guardar Objetivo
-                    </button>
-                    <button type="button" class="btn-primary" onclick="closeModal()" style="background: #95a5a6; flex: 1;">
-                        <i class="fas fa-times"></i> Cancelar
-                    </button>
+                <div class="form-group"><label>Meta de Ahorro (&euro;) *</label><input type="number" id="goalTarget" step="0.01" min="0.01" required placeholder="5000.00"></div>
+                <div class="form-group"><label>Ahorro Acumulado Propio (&euro;)</label><input type="number" id="goalCurrent" step="0.01" min="0" value="0"></div>
+                <div class="form-group"><label>Fecha Objetivo</label><input type="date" id="goalDate"></div>
+                <div style="display:flex;gap:10px;margin-top:30px;">
+                    <button type="submit" class="btn-primary" style="flex:1;"><i class="fas fa-save"></i> Guardar</button>
+                    <button type="button" class="btn-primary" onclick="closeModal()" style="background:#95a5a6;flex:1;"><i class="fas fa-times"></i> Cancelar</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        const userId = <?php echo $usuario_id; ?>;
-        const storageKey = `vaulta_goals_${userId}`;
-        let goals = [];
-        let editingGoalId = null;
+        const userId      = <?php echo $usuario_id; ?>;
+        const storageKey  = `vaulta_goals_${userId}`;
+        const SALDO_REAL  = <?php echo (float)$saldo_total; ?>;
+        const BAL_MENSUAL = <?php echo (float)$balance_mensual_neto; ?>;
+        let goals = [], editingGoalId = null;
 
-        // Cargar objetivos al iniciar
-        document.addEventListener('DOMContentLoaded', function() {
-            loadGoals();
-            renderGoals();
-        });
-
-        function loadGoals() {
-            const stored = localStorage.getItem(storageKey);
-            goals = stored ? JSON.parse(stored) : [];
-        }
-
-        function saveGoals() {
-            localStorage.setItem(storageKey, JSON.stringify(goals));
-        }
+        document.addEventListener('DOMContentLoaded', () => { loadGoals(); renderGoals(); });
+        function loadGoals() { const s = localStorage.getItem(storageKey); goals = s ? JSON.parse(s) : []; }
+        function saveGoals() { localStorage.setItem(storageKey, JSON.stringify(goals)); }
+        function fmt(n) { return n.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 
         function renderGoals() {
             const container = document.getElementById('goalsContainer');
-            const emptyState = document.getElementById('emptyState');
-            const goalsHeader = document.getElementById('goalsHeader');
-
-            if (goals.length === 0) {
-                container.innerHTML = '';
-                emptyState.style.display = 'block';
-                goalsHeader.style.display = 'none';
-                return;
-            }
-
-            emptyState.style.display = 'none';
-            goalsHeader.style.display = 'flex';
-            container.innerHTML = goals.map(goal => {
-                const progress = (goal.current / goal.target) * 100;
-                const isCompleted = progress >= 100;
-                const daysLeft = goal.date ? calculateDaysLeft(goal.date) : null;
-
-                return `
-                    <div class="goal-card">
-                        <div class="goal-header">
-                            <div>
-                                <div class="goal-icon" style="background: ${isCompleted ? '#f39c12' : '#667eea'}; color: white;">
-                                    ${goal.icon}
-                                </div>
-                                <div class="goal-title">${goal.name}</div>
-                                ${goal.description ? `<div class="goal-description">${goal.description}</div>` : ''}
-                            </div>
-                        </div>
-
-                        <div class="goal-amounts">
-                            <span class="current">€${goal.current.toFixed(2)}</span>
-                            <span class="target">de €${goal.target.toFixed(2)}</span>
-                        </div>
-
-                        <div class="progress-bar-container">
-                            <div class="progress-bar ${isCompleted ? 'completed' : ''}" style="width: ${Math.min(progress, 100)}%"></div>
-                        </div>
-
-                        <div class="progress-percentage">
-                            ${progress.toFixed(1)}% ${isCompleted ? '🎉 ¡Completado!' : 'alcanzado'}
-                        </div>
-
-                        <div class="goal-meta">
-                            <div class="goal-date">
-                                ${daysLeft !== null ? 
-                                    (daysLeft > 0 ? `<i class="fas fa-calendar"></i> ${daysLeft} días restantes` : 
-                                    daysLeft === 0 ? `<i class="fas fa-calendar"></i> ¡Hoy es el día!` :
-                                    `<i class="fas fa-calendar"></i> Fecha pasada`) 
-                                    : '<i class="fas fa-infinity"></i> Sin fecha límite'}
-                            </div>
-                            <div class="goal-actions">
-                                <button class="btn-icon" onclick="addProgress('${goal.id}')" title="Agregar progreso">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                                <button class="btn-icon" onclick="editGoal('${goal.id}')" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn-icon delete" onclick="deleteGoal('${goal.id}')" title="Eliminar">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
+            const empty     = document.getElementById('emptyState');
+            const hdr       = document.getElementById('goalsHeader');
+            if (!goals.length) { container.innerHTML=''; empty.style.display='block'; hdr.style.display='none'; return; }
+            empty.style.display='none'; hdr.style.display='flex';
+            container.innerHTML = goals.map(g => {
+                const pct       = (g.current / g.target) * 100;
+                const done      = pct >= 100;
+                const daysLeft  = g.date ? calcDays(g.date) : null;
+                const falta     = Math.max(0, g.target - SALDO_REAL);
+                const cubre     = SALDO_REAL >= g.target;
+                const saldoPct  = Math.min((SALDO_REAL / g.target) * 100, 100);
+                const color     = done ? '#f39c12' : cubre ? '#38a169' : '#667eea';
+                let insight = '';
+                if (done)       insight = `<div style="margin-top:10px;padding:10px;background:#f0fff4;border-radius:8px;border-left:3px solid #48bb78;font-size:13px;color:#276749;">&#127881; Meta manual alcanzada</div>`;
+                else if (cubre) insight = `<div style="margin-top:10px;padding:10px;background:#f0fff4;border-radius:8px;border-left:3px solid #48bb78;font-size:13px;color:#276749;"><i class="fas fa-check-circle"></i> Tu saldo actual (${fmt(SALDO_REAL)} &euro;) ya cubre esta meta.</div>`;
+                else if (BAL_MENSUAL > 0) { const m = Math.ceil(falta/BAL_MENSUAL); insight = `<div style="margin-top:10px;padding:10px;background:#ebf8ff;border-radius:8px;border-left:3px solid #3b82f6;font-size:13px;color:#1e3a5f;"><i class="fas fa-clock"></i> Faltan <strong>${fmt(falta)} &euro;</strong>. Con tu ahorro neto (~${fmt(BAL_MENSUAL)} &euro;/mes) lo alcanzar&iacute;as en <strong>~${m} ${m===1?'mes':'meses'}</strong>.</div>`; }
+                else            insight = `<div style="margin-top:10px;padding:10px;background:#fff5f5;border-radius:8px;border-left:3px solid #f56565;font-size:13px;color:#742a2a;"><i class="fas fa-exclamation-triangle"></i> Tu balance mensual es negativo. Revisa tus recurrentes.</div>`;
+                const dateHtml = daysLeft !== null ? (daysLeft>0?`<i class="fas fa-calendar"></i> ${daysLeft} d&iacute;as restantes`:daysLeft===0?`<i class="fas fa-calendar"></i> &iexcl;Hoy es el d&iacute;a!`:`<i class="fas fa-calendar"></i> Fecha pasada`) : '<i class="fas fa-infinity"></i> Sin fecha l&iacute;mite';
+                return `<div class="goal-card">
+                    <div class="goal-header"><div>
+                        <div class="goal-icon" style="background:${color};color:white;">${g.icon}</div>
+                        <div class="goal-title">${g.name}</div>
+                        ${g.description?`<div class="goal-description">${g.description}</div>`:''}
+                    </div></div>
+                    <div class="goal-amounts"><span class="current">Propio: ${fmt(g.current)} &euro;</span><span class="target">Meta: ${fmt(g.target)} &euro;</span></div>
+                    <div class="progress-bar-container"><div class="progress-bar ${done?'completed':''}" style="width:${Math.min(pct,100)}%"></div></div>
+                    <div style="font-size:12px;color:#718096;margin-bottom:10px;">${pct.toFixed(1)}% ahorro propio ${done?'&#127881;':''}</div>
+                    <div style="font-size:12px;color:#718096;margin-bottom:4px;">Cobertura con saldo real (${fmt(SALDO_REAL)} &euro;):</div>
+                    <div class="progress-bar-container"><div style="height:100%;width:${saldoPct}%;background:${cubre?'linear-gradient(90deg,#38a169,#48bb78)':'linear-gradient(90deg,#007bff,#3b82f6)'};border-radius:10px;transition:width .5s;"></div></div>
+                    <div style="font-size:12px;color:#718096;margin-bottom:4px;">${cubre?'&check; Saldo suficiente':'&#8987; '+saldoPct.toFixed(1)+'% cubierto con saldo actual'}</div>
+                    ${insight}
+                    <div class="goal-meta" style="margin-top:14px;">
+                        <div class="goal-date">${dateHtml}</div>
+                        <div class="goal-actions">
+                            <button class="btn-icon" onclick="addProgress('${g.id}')" title="A&ntilde;adir"><i class="fas fa-plus"></i></button>
+                            <button class="btn-icon" onclick="editGoal('${g.id}')" title="Editar"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon delete" onclick="deleteGoal('${g.id}')" title="Eliminar"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
-                `;
+                </div>`;
             }).join('');
         }
 
-        function calculateDaysLeft(dateString) {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const targetDate = new Date(dateString);
-            targetDate.setHours(0, 0, 0, 0);
-            const diffTime = targetDate - today;
-            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        }
-
-        function openModal() {
-            editingGoalId = null;
-            document.getElementById('modalTitle').textContent = 'Nuevo Objetivo de Ahorro';
-            document.getElementById('goalForm').reset();
-            document.getElementById('goalId').value = '';
-            document.getElementById('goalIcon').value = '💰';
-            
-            // Reset icon selection
-            document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
-            document.querySelector('.icon-option[data-icon="💰"]').classList.add('selected');
-            
-            document.getElementById('goalModal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('goalModal').classList.remove('active');
-            editingGoalId = null;
-        }
-
-        function selectIcon(element) {
-            document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
-            element.classList.add('selected');
-            document.getElementById('goalIcon').value = element.dataset.icon;
-        }
-
-        function saveGoal(event) {
-            event.preventDefault();
-
-            const goalData = {
-                id: editingGoalId || Date.now().toString(),
-                name: document.getElementById('goalName').value,
-                description: document.getElementById('goalDescription').value,
-                icon: document.getElementById('goalIcon').value,
-                target: parseFloat(document.getElementById('goalTarget').value),
-                current: parseFloat(document.getElementById('goalCurrent').value) || 0,
-                date: document.getElementById('goalDate').value,
-                createdAt: editingGoalId ? goals.find(g => g.id === editingGoalId).createdAt : new Date().toISOString()
-            };
-
-            if (editingGoalId) {
-                const index = goals.findIndex(g => g.id === editingGoalId);
-                goals[index] = goalData;
-                showAlert('Objetivo actualizado correctamente', 'success');
-            } else {
-                goals.push(goalData);
-                showAlert('Objetivo creado correctamente', 'success');
-            }
-
-            saveGoals();
-            renderGoals();
-            closeModal();
-        }
-
-        function editGoal(id) {
-            const goal = goals.find(g => g.id === id);
-            if (!goal) return;
-
-            editingGoalId = id;
-            document.getElementById('modalTitle').textContent = 'Editar Objetivo';
-            document.getElementById('goalId').value = goal.id;
-            document.getElementById('goalName').value = goal.name;
-            document.getElementById('goalDescription').value = goal.description || '';
-            document.getElementById('goalTarget').value = goal.target;
-            document.getElementById('goalCurrent').value = goal.current;
-            document.getElementById('goalDate').value = goal.date || '';
-            document.getElementById('goalIcon').value = goal.icon;
-
-            // Set icon selection
-            document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
-            const iconElement = document.querySelector(`.icon-option[data-icon="${goal.icon}"]`);
-            if (iconElement) iconElement.classList.add('selected');
-
-            document.getElementById('goalModal').classList.add('active');
-        }
-
-        function deleteGoal(id) {
-            if (!confirm('¿Estás seguro de que quieres eliminar este objetivo?')) return;
-
-            goals = goals.filter(g => g.id !== id);
-            saveGoals();
-            renderGoals();
-            showAlert('Objetivo eliminado correctamente', 'success');
-        }
-
-        function addProgress(id) {
-            const goal = goals.find(g => g.id === id);
-            if (!goal) return;
-
-            const amount = prompt(`¿Cuánto quieres agregar al objetivo "${goal.name}"?`, '0');
-            if (amount === null) return;
-
-            const addAmount = parseFloat(amount);
-            if (isNaN(addAmount) || addAmount <= 0) {
-                showAlert('Por favor ingresa una cantidad válida', 'error');
-                return;
-            }
-
-            goal.current += addAmount;
-            saveGoals();
-            renderGoals();
-            
-            if (goal.current >= goal.target) {
-                showAlert(`¡Felicidades! Has alcanzado tu objetivo "${goal.name}" 🎉`, 'success');
-            } else {
-                showAlert(`Se agregaron €${addAmount.toFixed(2)} al objetivo "${goal.name}"`, 'success');
-            }
-        }
-
-        function showAlert(message, type) {
-            const alert = document.getElementById('alert');
-            alert.textContent = message;
-            alert.className = `alert ${type} active`;
-            
-            setTimeout(() => {
-                alert.classList.remove('active');
-            }, 5000);
-        }
-
-        // Cerrar modal al hacer clic fuera
-        document.getElementById('goalModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
+        function calcDays(ds) { const t=new Date(); t.setHours(0,0,0,0); const d=new Date(ds); d.setHours(0,0,0,0); return Math.ceil((d-t)/86400000); }
+        function openModal() { editingGoalId=null; document.getElementById('modalTitle').textContent='Nuevo Objetivo'; document.getElementById('goalForm').reset(); document.getElementById('goalId').value=''; document.getElementById('goalIcon').value='&#128176;'; document.querySelectorAll('.icon-option').forEach(o=>o.classList.remove('selected')); const def=document.querySelector('.icon-option[data-icon="&#128176;"]'); if(def) def.classList.add('selected'); document.getElementById('goalModal').classList.add('active'); }
+        function closeModal() { document.getElementById('goalModal').classList.remove('active'); editingGoalId=null; }
+        function selectIcon(el) { document.querySelectorAll('.icon-option').forEach(o=>o.classList.remove('selected')); el.classList.add('selected'); document.getElementById('goalIcon').value=el.dataset.icon; }
+        function saveGoal(e) { e.preventDefault(); const d={id:editingGoalId||Date.now().toString(),name:document.getElementById('goalName').value,description:document.getElementById('goalDescription').value,icon:document.getElementById('goalIcon').value,target:parseFloat(document.getElementById('goalTarget').value),current:parseFloat(document.getElementById('goalCurrent').value)||0,date:document.getElementById('goalDate').value,createdAt:editingGoalId?goals.find(g=>g.id===editingGoalId).createdAt:new Date().toISOString()}; if(editingGoalId){goals[goals.findIndex(g=>g.id===editingGoalId)]=d;showAlert('Objetivo actualizado','success');}else{goals.push(d);showAlert('Objetivo creado','success');} saveGoals();renderGoals();closeModal(); }
+        function editGoal(id) { const g=goals.find(x=>x.id===id); if(!g) return; editingGoalId=id; document.getElementById('modalTitle').textContent='Editar Objetivo'; document.getElementById('goalId').value=g.id; document.getElementById('goalName').value=g.name; document.getElementById('goalDescription').value=g.description||''; document.getElementById('goalTarget').value=g.target; document.getElementById('goalCurrent').value=g.current; document.getElementById('goalDate').value=g.date||''; document.getElementById('goalIcon').value=g.icon; document.querySelectorAll('.icon-option').forEach(o=>o.classList.remove('selected')); const el=document.querySelector(`.icon-option[data-icon="${g.icon}"]`); if(el) el.classList.add('selected'); document.getElementById('goalModal').classList.add('active'); }
+        function deleteGoal(id) { if(!confirm('¿Eliminar este objetivo?')) return; goals=goals.filter(g=>g.id!==id); saveGoals();renderGoals();showAlert('Objetivo eliminado','success'); }
+        function addProgress(id) { const g=goals.find(x=>x.id===id); if(!g) return; const v=parseFloat(prompt(`¿Cuánto añadir al objetivo "${g.name}"?`,'0')); if(isNaN(v)||v<=0){showAlert('Introduce una cantidad válida mayor que 0','error');return;} g.current+=v; saveGoals();renderGoals(); showAlert(g.current>=g.target?`🎉 ¡Objetivo "${g.name}" completado!`:`Se añadieron ${v.toFixed(2)} € al objetivo`,'success'); }
+        function showAlert(msg,type) { const el=document.getElementById('alert'); el.textContent=msg; el.className=`alert ${type} active`; setTimeout(()=>el.classList.remove('active'),5000); }
+        document.getElementById('goalModal').addEventListener('click',e=>{ if(e.target===document.getElementById('goalModal')) closeModal(); });
     </script>
 <script src="dark-mode.js"></script>
 </body>

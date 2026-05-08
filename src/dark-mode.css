@@ -782,3 +782,125 @@ body.dark-mode .rec-info strong {
 body.dark-mode .rec-amount {
     color: #94a3b8 !important;
 }
+
+/* =======================================================
+   ESTIMADOR DE GASTOS - dark mode
+   ======================================================= */
+
+/* Fondo general de la pagina del estimador */
+body.dark-mode .dashboard-wrapper {
+    background: #0f1523 !important;
+}
+
+/* Cabecera (top-bar) del estimador */
+body.dark-mode .top-bar {
+    background: #1a2235 !important;
+    border: 1px solid #1f2937 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
+}
+
+body.dark-mode .welcome-text h1 {
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode .subtitle {
+    color: #64748b !important;
+}
+
+/* Secciones del formulario (.form-section) */
+body.dark-mode .form-section {
+    background: #1a2235 !important;
+    border: 1px solid #1f2937 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
+}
+
+body.dark-mode .section-title {
+    color: #f1f5f9 !important;
+    border-bottom-color: #1f2937 !important;
+}
+
+/* Selector de cuenta */
+body.dark-mode .cuenta-selector label {
+    color: #cbd5e0 !important;
+}
+
+body.dark-mode .cuenta-selector select {
+    background: #0f1523 !important;
+    border-color: #374151 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .cuenta-selector select:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15) !important;
+}
+
+/* Tarjetas de categoria (.categoria-item) */
+body.dark-mode .categoria-item {
+    background: #0f1523 !important;
+    border-left-color: #3b82f6 !important;
+}
+
+body.dark-mode .categoria-item.ingreso {
+    border-left-color: #22c55e !important;
+}
+
+body.dark-mode .categoria-nombre {
+    color: #e2e8f0 !important;
+}
+
+/* Inputs de cantidad dentro de cada categoria */
+body.dark-mode .input-group input {
+    background: #1a2235 !important;
+    border-color: #374151 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .input-group input::placeholder {
+    color: #4b5563 !important;
+}
+
+body.dark-mode .input-group input:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15) !important;
+}
+
+body.dark-mode .input-group .currency {
+    color: #64748b !important;
+}
+
+/* Alertas informativas (.alert-info, .alert-warning, .alert-error) */
+body.dark-mode .alert-info {
+    background: rgba(59,130,246,0.08) !important;
+    border-color: rgba(59,130,246,0.3) !important;
+    color: #93c5fd !important;
+}
+
+body.dark-mode .alert-warning {
+    background: rgba(245,158,11,0.08) !important;
+    border-color: rgba(245,158,11,0.3) !important;
+    color: #fcd34d !important;
+}
+
+body.dark-mode .alert-error {
+    background: rgba(239,68,68,0.08) !important;
+    border-color: rgba(239,68,68,0.3) !important;
+    color: #fca5a5 !important;
+}
+
+/* Info box azul degradado - se conserva el color pero se ajusta el texto */
+body.dark-mode .info-box {
+    background: linear-gradient(135deg, #0d2057 0%, #1a56db 100%) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+}
+
+/* Boton secundario (Limpiar) */
+body.dark-mode .btn-secondary {
+    background: #1f2d42 !important;
+    color: #cbd5e0 !important;
+    border: 1px solid #374151 !important;
+}
+
+body.dark-mode .btn-secondary:hover {
+    background: #263347 !important;
+}
